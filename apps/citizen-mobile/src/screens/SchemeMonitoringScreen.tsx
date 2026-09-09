@@ -39,7 +39,7 @@ export const SchemeMonitoringScreen: React.FC<Props> = ({ officerProfile, lang }
   ];
 
   const filteredSchemes = PAN_INDIA_GOV_SCHEMES.filter((s) => {
-    const name = s.name[lang] || s.name.hi || s.name.en;
+    const name = (s.name as any)[lang] || s.name.hi || s.name.en;
     const matchesSearch =
       name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       s.code.toLowerCase().includes(searchQuery.toLowerCase());
@@ -132,11 +132,11 @@ export const SchemeMonitoringScreen: React.FC<Props> = ({ officerProfile, lang }
           </Text>
 
           {filteredSchemes.map((s) => {
-            const schemeName = s.name[lang] || s.name.hi || s.name.en;
-            const subsidyText = s.subsidyDisplay[lang] || s.subsidyDisplay.hi || s.subsidyDisplay.en;
-            const ministryText = s.ministry[lang] || s.ministry.hi || s.ministry.en;
-            const maxLoanText = s.maxLoanDisplay[lang] || s.maxLoanDisplay.hi || s.maxLoanDisplay.en;
-            const badgeText = s.badge[lang] || s.badge.hi || s.badge.en;
+            const schemeName = (s.name as any)[lang] || s.name.hi || s.name.en;
+            const subsidyText = (s.subsidyDisplay as any)[lang] || s.subsidyDisplay.hi || s.subsidyDisplay.en;
+            const ministryText = (s.ministry as any)[lang] || s.ministry.hi || s.ministry.en;
+            const maxLoanText = (s.maxLoanDisplay as any)[lang] || s.maxLoanDisplay.hi || s.maxLoanDisplay.en;
+            const badgeText = (s.badge as any)[lang] || s.badge.hi || s.badge.en;
 
             return (
               <View key={s.id} style={styles.schemeCard}>

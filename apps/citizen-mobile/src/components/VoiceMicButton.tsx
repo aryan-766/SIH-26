@@ -27,6 +27,7 @@ export const VoiceMicButton: React.FC<Props> = ({
       case 'hi': return 'hi-IN';
       case 'mr': return 'mr-IN';
       case 'ta': return 'ta-IN';
+      case 'te': return 'te-IN';
       case 'en': return 'en-IN';
       default: return 'hi-IN';
     }
@@ -38,19 +39,44 @@ export const VoiceMicButton: React.FC<Props> = ({
 
       if (!SpeechRecognition) {
         // High quality simulated phrases for environments without active mic permission
-        const phrases = lang === 'en' ? [
-          "What is the subsidy under PMEGP for dairy farming?",
-          "How much capital do I need for cold press oil expeller?",
-          "Check MUDRA loan eligibility for my village",
-          "Schedule a site inspection with VDO Sanjay Verma"
-        ] : [
+        let phrases = [
           "डेयरी फार्मिंग के लिए PMEGP सब्सिडी कितनी है?",
-          "मिनी तेल एक्सपेलर यूनिट के लिए कितना लोन मिलेगा?",
-          "मेरे गाँव भीटी रावत के लिए सरकारी योजनाएं बताएं",
-          "VDO अधिकारी से भौतिक सत्यापन का अनुरोध करें"
+          "मेरा प्रोजेक्ट बजट 5 लाख रुपये सेट कर दो",
+          "आज 3500 रुपये की दूध बिक्री दर्ज करो",
+          "VDO संजय वर्मा से भौतिक सत्यापन का अनुरोध करें"
         ];
+        if (lang === 'en') {
+          phrases = [
+            "What is the subsidy under PMEGP for dairy farming?",
+            "Set my project budget to 5 lakh rupees",
+            "Record 3500 rupees milk sales today",
+            "Schedule a site inspection with VDO Sanjay Verma"
+          ];
+        } else if (lang === 'mr') {
+          phrases = [
+            "डेअरी फार्मिंगसाठी PMEGP सबसिडी किती आहे?",
+            "माझा प्रकल्प खर्च ५ लाख रुपये करा",
+            "आजची ३५०० रुपयांची दूध विक्री नोंदवा",
+            "VDO अधिकाऱ्यांशी स्थळ तपासणी निश्चित करा"
+          ];
+        } else if (lang === 'ta') {
+          phrases = [
+            "பால் பண்ணைக்கு PMEGP மானியம் எவ்வளவு?",
+            "திட்ட செலவை 5 லட்சம் ரூபாயாக மாற்றவும்",
+            "இன்றைய பால் விற்பனை 3500 ரூபாய் பதிவு செய்",
+            "VDO அதிகாரியிடம் தணிக்கை கோரிக்கை அனுப்பு"
+          ];
+        } else if (lang === 'te') {
+          phrases = [
+            "డైరీ ఫార్మింగ్‌కు PMEGP సబ్సిడీ ఎంత?",
+            "నా ప్రాజెక్ట్ బడ్జెట్ 5 లక్షల రూపాయలు చేయండి",
+            "నేటి పాల అమ్మకాలు 3500 రూపాయలు నమోదు చేయండి",
+            "VDO అధికారితో తనిఖీని షెడ్యూల్ చేయండి"
+          ];
+        }
+
         const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
-        setStatusText(lang === 'en' ? 'Simulating speech...' : 'ध्वनि इनपुट प्राप्त...');
+        setStatusText(lang === 'en' ? 'Processing speech...' : 'ध्वनि इनपुट प्राप्त...');
         setIsListening(true);
         setTimeout(() => {
           onTranscript(randomPhrase);

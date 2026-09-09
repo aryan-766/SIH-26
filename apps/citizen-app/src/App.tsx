@@ -9,6 +9,7 @@ import {
 import { MobileFrame } from './components/MobileFrame';
 import { VoiceMicButton } from './components/VoiceMicButton';
 import { VoiceNarrator } from './components/VoiceNarrator';
+import { VoiceAssistantModal } from './components/VoiceAssistantModal';
 import { LanguageSwitcher } from './components/LanguageSwitcher';
 import { FacilityRadar } from './components/FacilityRadar';
 import { ComparisonMatrix } from './components/ComparisonMatrix';
@@ -432,10 +433,11 @@ export default function App() {
       if (!isOnboarded) {
         setAuthMode('signup');
       } else {
-        setCurrentScreen('discovery');
+        setIsVoiceAssistantOpen(true);
       }
     } catch (e) {
       console.warn(e);
+      setIsVoiceAssistantOpen(true);
     }
   };
 
@@ -496,6 +498,28 @@ export default function App() {
     } catch (e) {
       console.warn(e);
     }
+  };
+
+  const [isVoiceAssistantOpen, setIsVoiceAssistantOpen] = useState(false);
+
+  const handleAddTxFromVoice = async (type: 'income' | 'expense', amount: number, category: string) => {
+    try {
+      await api.addDailyTransaction({
+        application_id: 'app_101',
+        type,
+        category,
+        amount,
+        description: `Voice entry: ${category}`
+      });
+      loadCopilotData();
+    } catch (e) {
+      console.warn(e);
+    }
+  };
+
+  const handleBudgetUpdatedFromVoice = (newCost: number) => {
+    setCustomTotalCost(newCost);
+    setCustomOwnContrib(Math.round(newCost * 0.15));
   };
 
   const handleAddTx = async (e: React.FormEvent) => {
@@ -615,9 +639,17 @@ export default function App() {
                 <span>{lang === 'hi' ? 'अधिकारी' : 'Officer'}</span>
               </button>
               <LanguageSwitcher currentLang={lang} onLanguageChange={setLang} />
+              <button
+                onClick={() => setIsVoiceAssistantOpen(true)}
+                className="text-[10px] font-bold bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 px-2 py-1 rounded-xl transition flex items-center gap-1 shadow-xs"
+                title="Voice Assistant"
+              >
+                <span>🎙️</span>
+                <span>{lang === 'en' ? 'Voice AI' : lang === 'mr' ? 'आवाज AI' : lang === 'ta' ? 'குரல் AI' : lang === 'te' ? 'వాయిస్ AI' : 'वॉइस AI'}</span>
+              </button>
               <VoiceMicButton 
                 onTranscript={handleVoiceCommand} 
-                language={lang === 'en' ? 'en-IN' : (lang === 'mr' ? 'mr-IN' : (lang === 'ta' ? 'ta-IN' : 'hi-IN'))} 
+                language={lang === 'en' ? 'en-IN' : (lang === 'mr' ? 'mr-IN' : (lang === 'ta' ? 'ta-IN' : (lang === 'te' ? 'te-IN' : 'hi-IN')))} 
               />
               <button
                 onClick={handleLogout}
@@ -1772,6 +1804,29 @@ export default function App() {
           </button>
         </div>
       )}
+
+      {/* Floating Voice Assistant Quick Action Button */}
+      {isOnboarded && appRole === 'entrepreneur' && (
+        <button
+          onClick={() => setIsVoiceAssistantOpen(true)}
+          className="fixed bottom-20 right-4 sm:right-6 z-40 bg-gradient-to-r from-emerald-600 to-teal-700 text-white px-3.5 py-2.5 rounded-full shadow-xl hover:shadow-2xl flex items-center gap-2 font-bold text-xs hover:scale-105 active:scale-95 transition-all"
+        >
+          <Sparkles className="w-4 h-4 animate-pulse" />
+          <span>{lang === 'en' ? 'Voice Copilot' : lang === 'mr' ? 'आवाज AI' : lang === 'ta' ? 'குரல் AI' : lang === 'te' ? 'వాయిస్ AI' : 'वॉइस सहायक'}</span>
+        </button>
+      )}
+
+      {/* Universal Voice Assistant Modal */}
+      <VoiceAssistantModal
+        isOpen={isVoiceAssistantOpen}
+        onClose={() => setIsVoiceAssistantOpen(false)}
+        lang={lang}
+        currentScreen={currentScreen}
+        userProfile={userProfile}
+        onProfileUpdated={(updated) => setUserProfile(updated)}
+        onAddTransaction={handleAddTxFromVoice}
+        onBudgetUpdated={handleBudgetUpdatedFromVoice}
+      />
     </MobileFrame>
   );
 }

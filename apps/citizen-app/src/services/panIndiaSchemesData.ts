@@ -10,6 +10,7 @@ export interface MultilingualText {
   en: string;
   mr: string;
   ta: string;
+  te?: string;
 }
 
 export interface MultilingualList {
@@ -17,6 +18,7 @@ export interface MultilingualList {
   en: string[];
   mr: string[];
   ta: string[];
+  te?: string[];
 }
 
 export interface GovScheme {
@@ -1618,7 +1620,7 @@ export const PAN_INDIA_GOV_SCHEMES: GovScheme[] = [
 export function getFilteredSchemes(
   categoryFilter: string,
   searchQuery: string,
-  lang: 'hi' | 'en' | 'mr' | 'ta'
+  lang: 'hi' | 'en' | 'mr' | 'ta' | 'te' | string
 ): GovScheme[] {
   let list = PAN_INDIA_GOV_SCHEMES;
 

@@ -22,6 +22,7 @@ interface Props {
   currentScreenTitle?: string;
   narrationText?: string;
   onVoiceTranscript?: (text: string) => void;
+  onOpenVoiceAssistant?: () => void;
 }
 
 export const AppHeader: React.FC<Props> = ({
@@ -35,6 +36,7 @@ export const AppHeader: React.FC<Props> = ({
   currentScreenTitle,
   narrationText,
   onVoiceTranscript,
+  onOpenVoiceAssistant,
 }) => {
   const isEn = lang === 'en';
   const isIas = officerProfile?.officerRole === 'ias_dm';
@@ -44,14 +46,21 @@ export const AppHeader: React.FC<Props> = ({
     { code: 'en', label: 'EN' },
     { code: 'mr', label: 'मराठी' },
     { code: 'ta', label: 'தமிழ்' },
+    { code: 'te', label: 'తెలుగు' },
   ];
 
   const defaultNarration = narrationText || (
     role === 'entrepreneur'
-      ? (isEn
+      ? (lang === 'en'
           ? `Welcome to GramUdyam. You are exploring rural business opportunities in ${userProfile?.districtName || 'Gorakhpur'}. Check your DPR, calculate loans, and apply for government subsidies.`
+          : lang === 'mr'
+          ? `ग्रामउद्यम मध्ये आपले स्वागत आहे. आपण ${userProfile?.districtName || 'पुणे'} मध्ये व्यवसाय संधी शोधत आहात. आपला डीपीआर तपासा आणि अनुदानासाठी अर्ज करा.`
+          : lang === 'ta'
+          ? `கிராம்உத்யோக் உங்களை வரவேற்கிறது. உங்கள் தொழிலுக்கான DPR, வங்கி கடன் மற்றும் அரசு மானியங்களை பெறலாம்.`
+          : lang === 'te'
+          ? `గ్రామ్‌ఉద్యమ్‌కు స్వాగతం. మీ వ్యాపారానికి DPR, బ్యాంకు రుణం మరియు ప్రభుత్వ సబ్సిడీలను పొందండి.`
           : `ग्रामउद्यम में आपका स्वागत है। आप ${userProfile?.districtName || 'गोरखपुर'} में ग्रामीण व्यापार अवसरों की खोज कर रहे हैं। अपना DPR देखें, ऋण की गणना करें और सरकारी सब्सिडी के लिए आवेदन करें।`)
-      : (isEn
+      : (lang === 'en'
           ? `GramUdyam Official Command Dashboard. Monitoring enterprise verification, GIS radar, beneficiary pipeline, and subsidy disbursements.`
           : `ग्रामउद्यम शासकीय डैशबोर्ड। उद्यम सत्यापन, GIS रडार, लाभार्थी पाइपलाइन एवं सब्सिडी वितरण का लाइव पर्यवेक्षण।`)
   );
@@ -158,11 +167,23 @@ export const AppHeader: React.FC<Props> = ({
           ))}
         </View>
 
-        {/* Voice Features (Narrator + Mic) */}
+        {/* Voice Features (Narrator + Mic + Full Voice Assistant) */}
         <View style={styles.voiceGroup}>
           <VoiceNarrator textToSpeak={defaultNarration} lang={lang} />
           {onVoiceTranscript && (
             <VoiceMicButton onTranscript={onVoiceTranscript} lang={lang} size={30} />
+          )}
+          {onOpenVoiceAssistant && (
+            <TouchableOpacity
+              style={styles.assistantTriggerBtn}
+              onPress={onOpenVoiceAssistant}
+              activeOpacity={0.7}
+            >
+              <Ionicons name="sparkles" size={13} color="#ffffff" />
+              <Text style={styles.assistantTriggerText}>
+                {lang === 'en' ? 'Voice AI' : lang === 'mr' ? 'आवाज AI' : lang === 'ta' ? 'குரல் AI' : lang === 'te' ? 'వాయిస్ AI' : 'वॉइस AI'}
+              </Text>
+            </TouchableOpacity>
           )}
         </View>
       </View>
@@ -313,5 +334,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
+  },
+  assistantTriggerBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
+    backgroundColor: '#7c3aed',
+    paddingHorizontal: 7,
+    paddingVertical: 4,
+    borderRadius: RADIUS.full,
+  },
+  assistantTriggerText: {
+    fontSize: 10,
+    fontWeight: '700',
+    color: '#ffffff',
   },
 });

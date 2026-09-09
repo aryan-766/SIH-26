@@ -381,9 +381,9 @@ export const OfficerDashboardScreen: React.FC<Props> = ({
         {activeTab === 'schemes' && (
           <View style={styles.tabContent}>
             {PAN_INDIA_GOV_SCHEMES.map((sch) => {
-              const schemeName = sch.name[lang] || sch.name.hi || sch.name.en;
-              const subsidyText = sch.subsidyDisplay[lang] || sch.subsidyDisplay.hi || sch.subsidyDisplay.en;
-              const maxLoanText = sch.maxLoanDisplay[lang] || sch.maxLoanDisplay.hi || sch.maxLoanDisplay.en;
+              const schemeName = (sch.name as any)[lang] || sch.name.hi || sch.name.en;
+              const subsidyText = (sch.subsidyDisplay as any)[lang] || sch.subsidyDisplay.hi || sch.subsidyDisplay.en;
+              const maxLoanText = (sch.maxLoanDisplay as any)[lang] || sch.maxLoanDisplay.hi || sch.maxLoanDisplay.en;
 
               return (
                 <View key={sch.id} style={styles.schemeCard}>

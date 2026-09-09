@@ -15,7 +15,8 @@ export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
     { code: 'hi', label: 'Hindi', script: 'हिन्दी' },
     { code: 'en', label: 'English', script: 'English' },
     { code: 'mr', label: 'Marathi', script: 'मराठी' },
-    { code: 'ta', label: 'Tamil', script: 'தமிழ்' }
+    { code: 'ta', label: 'Tamil', script: 'தமிழ்' },
+    { code: 'te', label: 'Telugu', script: 'తెలుగు' }
   ];
 
   return (

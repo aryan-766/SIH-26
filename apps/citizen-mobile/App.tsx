@@ -4,7 +4,7 @@
  * Feature-identical matching with citizen-app web
  */
 import React, { useState, useCallback } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StatusBar } from 'expo-status-bar';
@@ -12,6 +12,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 
 import { AppHeader } from './src/components/AppHeader';
+import { VoiceAssistantModal } from './src/components/VoiceAssistantModal';
 import { AuthScreen } from './src/screens/AuthScreen';
 import { OverviewScreen } from './src/screens/OverviewScreen';
 import { FinanceScreen } from './src/screens/FinanceScreen';
@@ -37,6 +38,8 @@ export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [appRole, setAppRole] = useState<'entrepreneur' | 'official'>('entrepreneur');
   const [lang, setLang] = useState<Language>('hi');
+  const [voiceModalVisible, setVoiceModalVisible] = useState(false);
+  const [activeScreenName, setActiveScreenName] = useState('overview');
 
   // Pre-seed active session with Ramesh Yadav so app never loads blank
   const [userProfile, setUserProfile] = useState<BeneficiaryProfile | null>(
@@ -65,9 +68,11 @@ export default function App() {
     if (appRole === 'entrepreneur') {
       if (!officerProfile) setOfficerProfile(DEFAULT_FIELD_OFFICER);
       setAppRole('official');
+      setActiveScreenName('command');
     } else {
       if (!userProfile) setUserProfile(SEED_REGISTERED_ENTREPRENEURS[0].profile);
       setAppRole('entrepreneur');
+      setActiveScreenName('overview');
     }
   }, [appRole, officerProfile, userProfile]);
 
@@ -99,6 +104,9 @@ export default function App() {
           onLogout={handleLogout}
           userProfile={userProfile}
           officerProfile={officerProfile}
+          currentScreenTitle={activeScreenName}
+          onVoiceTranscript={() => setVoiceModalVisible(true)}
+          onOpenVoiceAssistant={() => setVoiceModalVisible(true)}
         />
 
         <NavigationContainer>
@@ -124,6 +132,12 @@ export default function App() {
                   return <Ionicons name={iconName} size={20} color={color} />;
                 },
               })}
+              screenListeners={{
+                state: (e: any) => {
+                  const r = e.data.state.routes[e.data.state.index];
+                  if (r) setActiveScreenName(r.name.toLowerCase());
+                },
+              }}
             >
               <Tab.Screen
                 name="Overview"
@@ -208,6 +222,12 @@ export default function App() {
                   return <Ionicons name={iconName} size={20} color={color} />;
                 },
               })}
+              screenListeners={{
+                state: (e: any) => {
+                  const r = e.data.state.routes[e.data.state.index];
+                  if (r) setActiveScreenName(r.name.toLowerCase());
+                },
+              }}
             >
               <Tab.Screen
                 name="Command"
@@ -265,6 +285,28 @@ export default function App() {
             </Tab.Navigator>
           )}
         </NavigationContainer>
+
+        {/* Quick Floating Voice Assistant FAB */}
+        <TouchableOpacity
+          style={styles.floatingFab}
+          onPress={() => setVoiceModalVisible(true)}
+          activeOpacity={0.85}
+        >
+          <Ionicons name="sparkles" size={16} color="#ffffff" />
+          <Text style={styles.floatingFabText}>
+            {lang === 'en' ? 'Voice Copilot' : lang === 'mr' ? 'आवाज AI' : lang === 'ta' ? 'குரல் AI' : lang === 'te' ? 'వాయిస్ AI' : 'वॉइस सहायक'}
+          </Text>
+        </TouchableOpacity>
+
+        {/* Universal Multilingual Voice Assistant Modal */}
+        <VoiceAssistantModal
+          visible={voiceModalVisible}
+          onClose={() => setVoiceModalVisible(false)}
+          lang={lang}
+          currentScreenName={activeScreenName}
+          userProfile={userProfile}
+          onProfileUpdated={(updated) => setUserProfile(updated)}
+        />
       </View>
     </SafeAreaProvider>
   );
@@ -300,5 +342,28 @@ const styles = StyleSheet.create({
     backgroundColor: '#4338ca',
     fontSize: 9,
     fontWeight: '900',
+  },
+  floatingFab: {
+    position: 'absolute',
+    bottom: 70,
+    right: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    backgroundColor: '#7c3aed',
+    paddingHorizontal: 14,
+    paddingVertical: 9,
+    borderRadius: RADIUS.full,
+    shadowColor: '#7c3aed',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.35,
+    shadowRadius: 6,
+    elevation: 8,
+    zIndex: 99,
+  },
+  floatingFabText: {
+    fontSize: 12,
+    fontWeight: '800',
+    color: '#ffffff',
   },
 });

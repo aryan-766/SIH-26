@@ -26,6 +26,7 @@ export const VoiceNarrator: React.FC<Props> = ({
       case 'hi': return 'hi-IN';
       case 'mr': return 'mr-IN';
       case 'ta': return 'ta-IN';
+      case 'te': return 'te-IN';
       case 'en': return 'en-IN';
       default: return 'hi-IN';
     }
@@ -57,8 +58,8 @@ export const VoiceNarrator: React.FC<Props> = ({
   };
 
   const defaultLabel = isSpeaking
-    ? (lang === 'en' ? 'Stop' : 'रोकें')
-    : label || (lang === 'en' ? 'Listen' : lang === 'mr' ? 'ऐका' : lang === 'ta' ? 'கேளுங்கள்' : 'सुनें');
+    ? (lang === 'en' ? 'Stop' : lang === 'mr' ? 'थांबवा' : lang === 'ta' ? 'நிறுத்து' : lang === 'te' ? 'ఆపు' : 'रोकें')
+    : label || (lang === 'en' ? 'Listen' : lang === 'mr' ? 'ऐका' : lang === 'ta' ? 'கேளுங்கள்' : lang === 'te' ? 'వినండి' : 'सुनें');
 
   return (
     <TouchableOpacity

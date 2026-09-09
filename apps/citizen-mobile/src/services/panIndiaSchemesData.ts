@@ -10,6 +10,7 @@ export interface MultilingualText {
   en: string;
   mr: string;
   ta: string;
+  te?: string;
 }
 
 export interface MultilingualList {
@@ -17,6 +18,7 @@ export interface MultilingualList {
   en: string[];
   mr: string[];
   ta: string[];
+  te?: string[];
 }
 
 export interface GovScheme {

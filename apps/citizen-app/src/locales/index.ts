@@ -1,4 +1,4 @@
-export type Language = 'hi' | 'en' | 'mr' | 'ta';
+export type Language = 'hi' | 'en' | 'mr' | 'ta' | 'te';
 
 export interface Translations {
   appName: string;
@@ -511,10 +511,111 @@ export const translations: Record<Language, Translations> = {
     syncedBadge: "முடிந்தது ✓",
     localBadge: "உள்ளூர் சேமிப்பு",
 
-    dpdpComplianceText: "DPDP Act 2023 இணக்கம்",
+    dpdpComplianceText: "DPDP Act 2023 இணக்கம் (சம்மத சாண்ட்பாக்ஸ்)",
     demoOtpText: "டெமோ OTP: 123456",
-    voiceNarrationDiscovery: "பால் பண்ணை உங்களுக்கு மிகவும் பொருத்தமான தொழில்.",
-    voiceNarrationFinance: "உங்களுக்கு இரண்டு லட்சம் கடன் மற்றும் மானியம் கிடைக்கும்.",
-    voiceNarrationCopilot: "உங்கள் தொழில் நல்ல நிலையில் உள்ளது."
+    voiceNarrationDiscovery: "பால் பண்ணை தொழில் உங்களுக்கு மிகவும் பொருத்தமானது, 85 சதவீத பொருத்தம் மதிப்பெண் மற்றும் பால் குளிர் மையம் 4 கிலோமீட்டர் தொலைவில் உள்ளது.",
+    voiceNarrationFinance: "இரண்டு லட்சம் ரூபாய் கடன் மற்றும் எழுபது ஆயிரம் ரூபாய் PMEGP மானியம் கிடைக்கும். மாதாந்திர தவணை 4,250 ரூபாய் ஆகும்.",
+    voiceNarrationCopilot: "உங்கள் தினசரி பண ஓட்டம் சிறப்பாக உள்ளது. கடந்த வாரம் பன்னிரண்டு ஆயிரம் ரூபாய் விற்பனை பதிவு செய்தீர்கள்."
+  },
+  te: {
+    appName: "గ్రామ్‌ఉద్యమ్",
+    tagline: "గ్రామీణ వ్యాపార మేధస్సు వేదిక",
+    selectLanguage: "మీ భాషను ఎంచుకోండి",
+    continueBtn: "కొనసాగించు",
+    listeningVoice: "వింటున్నాను... మాట్లాడండి",
+    speakToSelect: "మైక్ నొక్కి చెప్పండి: 'డైరీ' లేదా '80 వేల పెట్టుబడి'",
+
+    navDiscovery: "అవకాశాలు",
+    navCompare: "పోలిక",
+    navFinances: "రుణం & DPR",
+    navSchemes: "ప్రభుత్వ పథకాలు",
+    navLaunch: "లాంచ్ చెక్‌లిస్ట్",
+    navCopilot: "వ్యాపార సహాయకుడు",
+    navAdvisor: "సలహాదారు చాట్",
+    fieldOfficerMode: "ఫీల్డ్ అధికారి మోడ్",
+
+    beneficiaryProfile: "లబ్ధిదారు వివరాలు",
+    userName: "రమేష్ కుమార్ యాదవ్",
+    userVillage: "భీతి రావత్ (గోరఖ్‌పూర్)",
+    skillsDairyAgri: "డైరీ / వ్యవసాయం",
+    availableCapital: "అందుబాటులో ఉన్న మూలధనం",
+    selectSkills: "నైపుణ్యాలు & అనుభవం",
+    landSpace: "అందుబాటులో ఉన్న స్థలం",
+    experience: "పని అనుభవం",
+    constraints: "కుటుంబ పరిమితులు",
+    myProfile: "నా ప్రొఫైల్",
+    editProfile: "ప్రొఫైల్ సవరించు",
+    closeBtn: "మూసివేయి",
+    findOpportunities: "అవకాశాలు వెతుకు",
+
+    nearbyFacilities: "స్థానిక 5-10 కి.మీ రాడార్",
+    facility5km: "5 కి.మీ పరిధి",
+    facility10km: "10 కి.మీ పరిధి",
+    competitors: "పోటీదారులు",
+    chillingCenter: "పాల చిల్లింగ్ కేంద్రం",
+    mandi: "వ్యవసాయ మార్కెట్",
+    banks: "బ్యాంకు శాఖలు",
+    suppliers: "దాణా & సామగ్రి సరఫరాదారులు",
+    radarRadiusInfo: "భీతి రావత్ గ్రామం నుండి 5 మరియు 10 కి.మీ పరిధిలో అందుబాటులో ఉన్న సౌకర్యాలు",
+
+    recommendedBusinesses: "సిఫార్సు చేయబడిన వ్యాపారాలు",
+    recommendedSubtitle: "మీ మూలధనం, నైపుణ్యాలు మరియు స్థానిక డిమాండ్ ఆధారంగా",
+    estimatedInvestment: "అంచనా పెట్టుబడి",
+    expectedMargin: "ఆశించిన లాభం",
+    riskLevel: "ప్రమాద స్థాయి",
+    equipment: "పరికరాలు",
+    details: "వివరాలు",
+    viewRadar: "5-10 కి.మీ రాడార్ చూడు",
+    compareOptions: "ప్రత్యామ్నాయాలు పోల్చండి",
+
+    financeTitle: "ఆర్థిక & రుణ సిమ్యులేటర్",
+    financeSubtitle: "మొత్తం వ్యయం, సబ్సిడీ మరియు నెలవారీ EMI లెక్కించండి",
+    totalProjectCost: "మొత్తం ప్రాజెక్ట్ వ్యయం",
+    ownContribution: "స్వంత వాటా",
+    moratoriumPeriod: "మారటోరియం కాలం",
+    months: "నెలలు",
+    emiSubsidySummary: "సబ్సిడీ & బ్యాంకు రుణ నిర్మాణం",
+    generateDpr: "DPR నివేదిక తయారు చేయండి",
+    dprDownloadSuccess: "DPR బ్యాంకు ఫార్మాట్‌లో డౌన్‌లోడ్ అయింది",
+
+    schemesTitle: "అర్హులైన ప్రభుత్వ పథకాలు",
+    schemesSubtitle: "PMEGP, ముద్రా మరియు PMFME సబ్సిడీలు",
+    subsidyRate: "సబ్సిడీ రేటు",
+    collateralFree: "హామీ లేని రుణం",
+    applyScheme: "దరఖాస్తు చేయండి",
+
+    checklistTitle: "వ్యాపార స్థాపన చెక్‌లిస్ట్",
+    checklistSubtitle: "వ్యాపారం ప్రారంభించడానికి 5 ముఖ్యమైన దశలు",
+    completedSteps: "దశలు పూర్తయ్యాయి",
+
+    copilotTitle: "AI వ్యాపార సహాయకుడు",
+    copilotSubtitle: "రోజువారీ అమ్మకాలు, ఖర్చులు మరియు AI సలహా",
+    dailyIncome: "నేటి ఆదాయం (అమ్మకాలు)",
+    dailyExpense: "నేటి ఖర్చు (దాణా/ఇంధనం)",
+    recordTx: "లావాదేవీ నమోదు చేయండి",
+    healthStatus: "వ్యాపార ఆరోగ్యం",
+    healthSurplusNotice: "EMI సురక్షితం • నగదు మిగులు",
+    askAdvicePlaceholder: "అడగండి: 'దాణా ధరలు పెరిగాయి, ఏమి చేయాలి?'",
+    askAdviceBtn: "సలహా పొందండి",
+    quickLedger: "రోజువారీ లెక్కల నమోదు",
+    amountRs: "మొత్తం ₹",
+    descriptionPlaceholder: "వివరణ (ఉదా: 24L పాల సరఫరా)",
+
+    fieldOfficerTitle: "ఫీల్డ్ అధికారి సహాయక మోడ్",
+    fieldOfficerSubtitle: "గ్రామంలో ఆఫ్‌లైన్ సర్వే, వాయిస్ ఇంటర్వ్యూ & సమకాలీకరణ",
+    offlineCacheTitle: "ఆఫ్‌లైన్ డేటా నిల్వ",
+    offlineCacheDesc: "ఇంటర్నెట్ లేకపోయినా డేటా సేవ్ చేయవచ్చు. నెట్‌వర్క్ వచ్చినప్పుడు 1-క్లిక్‌లో సమకాలీకరించండి.",
+    tokenActive24h: "24 గంటల టోకెన్ క్రియాశీలంగా ఉంది",
+    localSavedSurveys: "స్థానికంగా సేవ్ అయిన సర్వేలు",
+    syncBtn: "కేంద్ర సర్వర్‌కు సమకాలీకరించండి",
+    syncing: "సమకాలీకరిస్తోంది...",
+    syncedBadge: "సమకాలీకరించబడింది ✓",
+    localBadge: "స్థానిక నిల్వ",
+
+    dpdpComplianceText: "DPDP Act 2023 అనుసరణ (సమ్మతి సాండ్‌బాక్స్)",
+    demoOtpText: "డెమో OTP: 123456",
+    voiceNarrationDiscovery: "డైరీ వ్యవసాయం మీకు అత్యంత అనుకూలమైన వ్యాపారం, 85 శాతం అనుకూలత స్కోరు మరియు పాల చిల్లింగ్ కేంద్రం 4 కిలోమీటర్ల దూరంలో ఉంది.",
+    voiceNarrationFinance: "మీకు రెండు లక్షల రూపాయల రుణం మరియు డెబ్బై వేల రూపాయల PMEGP సబ్సిడీ అందుతుంది. నెలవారీ EMI 4,250 రూపాయలు ఉంటుంది.",
+    voiceNarrationCopilot: "మీ రోజువారీ నగదు ప్రవాహం ఆరోగ్యంగా ఉంది. గత వారం పన్నెండు వేల రూపాయల అమ్మకాలు నమోదు చేసారు."
   }
 };
