@@ -1,0 +1,56 @@
+name: NREIP Ecosystem CI Pipeline
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  backend-test:
+    name: Backend Test Suite & Scoping Audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install Backend Dependencies
+        working-directory: ./backend
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt pytest httpx
+
+      - name: Run Pytest Suite (Engines, API, RBAC)
+        working-directory: ./backend
+        run: |
+          python -m pytest tests -v
+
+  frontend-build:
+    name: Frontend Build & Type Validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Build Citizen Mobile App
+        working-directory: ./apps/citizen-app
+        run: |
+          npm ci
+          npm run build
+
+      - name: Build Government Officer Portal
+        working-directory: ./apps/officer-portal
+        run: |
+          npm ci
+          npm run build
