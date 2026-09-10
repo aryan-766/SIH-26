@@ -80,7 +80,7 @@ export const FinanceScreen: React.FC<Props> = ({ userProfile, lang }) => {
   ];
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
+    <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
 
         {/* Title */}
@@ -323,7 +323,7 @@ export const FinanceScreen: React.FC<Props> = ({ userProfile, lang }) => {
 
         <View style={{ height: 20 }} />
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 

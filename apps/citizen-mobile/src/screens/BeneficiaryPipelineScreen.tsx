@@ -175,7 +175,7 @@ export const BeneficiaryPipelineScreen: React.FC<Props> = ({ officerProfile, lan
   });
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
+    <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
         {/* Header with 46 badge */}
         <View style={styles.header}>
@@ -329,7 +329,7 @@ export const BeneficiaryPipelineScreen: React.FC<Props> = ({ officerProfile, lan
           ))}
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 

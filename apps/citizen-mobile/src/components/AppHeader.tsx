@@ -1,21 +1,20 @@
 /**
  * GramUdyam — Universal App Header
- * Top bar with Language Switcher, Voice Narrator/Mic, Role Switcher, and Logout
+ * Top bar with Language Dropdown and Logout
  */
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, SPACING, FONT, RADIUS } from '../theme';
 import { Language } from '../locales';
-import { VoiceNarrator } from './VoiceNarrator';
-import { VoiceMicButton } from './VoiceMicButton';
 import { BeneficiaryProfile, OfficerProfile } from '../services/enterpriseStore';
 
 interface Props {
   lang: Language;
   onSetLang: (l: Language) => void;
   role: 'entrepreneur' | 'official';
-  onToggleRole: () => void;
+  onToggleRole?: () => void;
   onLogout: () => void;
   userProfile?: BeneficiaryProfile | null;
   officerProfile?: OfficerProfile | null;
@@ -29,183 +28,129 @@ export const AppHeader: React.FC<Props> = ({
   lang,
   onSetLang,
   role,
-  onToggleRole,
   onLogout,
   userProfile,
   officerProfile,
-  currentScreenTitle,
-  narrationText,
-  onVoiceTranscript,
-  onOpenVoiceAssistant,
 }) => {
-  const isEn = lang === 'en';
   const isIas = officerProfile?.officerRole === 'ias_dm';
+  const [langDropdownOpen, setLangDropdownOpen] = useState(false);
 
   const languages: { code: Language; label: string }[] = [
     { code: 'hi', label: 'हिन्दी' },
-    { code: 'en', label: 'EN' },
+    { code: 'en', label: 'English' },
     { code: 'mr', label: 'मराठी' },
     { code: 'ta', label: 'தமிழ்' },
     { code: 'te', label: 'తెలుగు' },
   ];
 
-  const defaultNarration = narrationText || (
-    role === 'entrepreneur'
-      ? (lang === 'en'
-          ? `Welcome to GramUdyam. You are exploring rural business opportunities in ${userProfile?.districtName || 'Gorakhpur'}. Check your DPR, calculate loans, and apply for government subsidies.`
-          : lang === 'mr'
-          ? `ग्रामउद्यम मध्ये आपले स्वागत आहे. आपण ${userProfile?.districtName || 'पुणे'} मध्ये व्यवसाय संधी शोधत आहात. आपला डीपीआर तपासा आणि अनुदानासाठी अर्ज करा.`
-          : lang === 'ta'
-          ? `கிராம்உத்யோக் உங்களை வரவேற்கிறது. உங்கள் தொழிலுக்கான DPR, வங்கி கடன் மற்றும் அரசு மானியங்களை பெறலாம்.`
-          : lang === 'te'
-          ? `గ్రామ్‌ఉద్యమ్‌కు స్వాగతం. మీ వ్యాపారానికి DPR, బ్యాంకు రుణం మరియు ప్రభుత్వ సబ్సిడీలను పొందండి.`
-          : `ग्रामउद्यम में आपका स्वागत है। आप ${userProfile?.districtName || 'गोरखपुर'} में ग्रामीण व्यापार अवसरों की खोज कर रहे हैं। अपना DPR देखें, ऋण की गणना करें और सरकारी सब्सिडी के लिए आवेदन करें।`)
-      : (lang === 'en'
-          ? `GramUdyam Official Command Dashboard. Monitoring enterprise verification, GIS radar, beneficiary pipeline, and subsidy disbursements.`
-          : `ग्रामउद्यम शासकीय डैशबोर्ड। उद्यम सत्यापन, GIS रडार, लाभार्थी पाइपलाइन एवं सब्सिडी वितरण का लाइव पर्यवेक्षण।`)
-  );
+  const selectedLangObj = languages.find((l) => l.code === lang) || languages[0];
 
   return (
-    <View style={styles.container}>
-      {/* Top Brand Strip */}
-      <View style={styles.topRow}>
-        <View style={styles.brandGroup}>
-          <View style={[styles.logoBox, role === 'official' && styles.logoBoxOfficer]}>
-            <Ionicons
-              name={role === 'official' ? (isIas ? 'business' : 'shield') : 'leaf'}
-              size={18}
-              color={COLORS.white}
-            />
-          </View>
-          <View>
-            <View style={styles.brandTitleRow}>
-              <Text style={styles.brandName}>GramUdyam</Text>
-              <View
-                style={[
-                  styles.rolePill,
-                  role === 'official'
-                    ? (isIas ? styles.rolePillIas : styles.rolePillVdo)
-                    : styles.rolePillEnt,
-                ]}
-              >
-                <Text
-                  style={[
-                    styles.rolePillText,
-                    role === 'official'
-                      ? (isIas ? styles.rolePillTextIas : styles.rolePillTextVdo)
-                      : styles.rolePillTextEnt,
-                  ]}
-                >
-                  {role === 'official'
-                    ? (isIas ? '🏛️ IAS DM' : '📋 VDO Sachiv')
-                    : (isEn ? 'Entrepreneur' : 'उद्यमी')}
-                </Text>
-              </View>
+    <SafeAreaView edges={['top']} style={styles.safeArea}>
+      <View style={styles.container}>
+        <View style={styles.topRow}>
+          {/* Brand Group (Left) */}
+          <View style={styles.brandGroup}>
+            <View style={[styles.logoBox, role === 'official' && styles.logoBoxOfficer]}>
+              <Ionicons
+                name={role === 'official' ? (isIas ? 'business' : 'shield') : 'leaf'}
+                size={18}
+                color={COLORS.white}
+              />
             </View>
-            <Text style={styles.locationSub}>
-              📍 {role === 'official'
-                ? `${officerProfile?.district || 'Gorakhpur'} • ${officerProfile?.fullName || 'Officer'}`
-                : `${userProfile?.districtName || 'Gorakhpur'} • ${userProfile?.villageName || 'Bhiti Rawat'}`}
-            </Text>
+            <View>
+              <View style={styles.brandTitleRow}>
+                <Text style={styles.brandName}>GramUdyam</Text>
+              </View>
+              <Text style={styles.locationSub}>
+                📍 {role === 'official'
+                  ? `${officerProfile?.district || 'Gorakhpur'} • ${officerProfile?.fullName || 'Officer'}`
+                  : `${userProfile?.districtName || 'Gorakhpur'} • ${userProfile?.villageName || 'Bhiti Rawat'}`}
+              </Text>
+            </View>
+          </View>
+
+          {/* Actions Right: Language Dropdown + Logout */}
+          <View style={styles.actionsRight}>
+            {/* Language Dropdown Selector */}
+            <View style={styles.langDropdownContainer}>
+              <TouchableOpacity
+                style={styles.langDropdownBtn}
+                onPress={() => setLangDropdownOpen(!langDropdownOpen)}
+                activeOpacity={0.7}
+              >
+                <Ionicons name="globe-outline" size={13} color={COLORS.primary} />
+                <Text style={styles.langDropdownText}>{selectedLangObj.label}</Text>
+                <Ionicons
+                  name={langDropdownOpen ? 'chevron-up' : 'chevron-down'}
+                  size={12}
+                  color={COLORS.textSecondary}
+                />
+              </TouchableOpacity>
+
+              {langDropdownOpen && (
+                <View style={styles.langDropdownMenu}>
+                  {languages.map((l) => (
+                    <TouchableOpacity
+                      key={l.code}
+                      style={[
+                        styles.langDropdownOption,
+                        lang === l.code && styles.langDropdownOptionActive,
+                      ]}
+                      onPress={() => {
+                        onSetLang(l.code);
+                        setLangDropdownOpen(false);
+                      }}
+                      activeOpacity={0.7}
+                    >
+                      <Text
+                        style={[
+                          styles.langDropdownOptionText,
+                          lang === l.code && styles.langDropdownOptionTextActive,
+                        ]}
+                      >
+                        {l.label}
+                      </Text>
+                      {lang === l.code && (
+                        <Ionicons name="checkmark" size={12} color={COLORS.primary} />
+                      )}
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              )}
+            </View>
+
+            {/* Logout Button */}
+            <TouchableOpacity
+              style={styles.logoutBtn}
+              onPress={onLogout}
+              activeOpacity={0.7}
+            >
+              <Ionicons name="log-out-outline" size={16} color="#ef4444" />
+            </TouchableOpacity>
           </View>
         </View>
-
-        {/* Action Controls: Switch Role & Logout */}
-        <View style={styles.actionsRight}>
-          <TouchableOpacity
-            style={styles.switchRoleBtn}
-            onPress={onToggleRole}
-            activeOpacity={0.7}
-          >
-            <Ionicons
-              name="swap-horizontal"
-              size={14}
-              color={role === 'official' ? COLORS.accent : COLORS.primary}
-            />
-            <Text
-              style={[
-                styles.switchRoleText,
-                { color: role === 'official' ? COLORS.accent : COLORS.primary },
-              ]}
-            >
-              {role === 'official'
-                ? (isEn ? 'Citizen App' : 'उद्यमी मोड')
-                : (isEn ? 'Officer Portal' : 'अधिकारी पोर्टल')}
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.logoutBtn}
-            onPress={onLogout}
-            activeOpacity={0.7}
-          >
-            <Ionicons name="log-out-outline" size={16} color="#ef4444" />
-          </TouchableOpacity>
-        </View>
       </View>
-
-      {/* Bottom Controls Strip: Language Selector + Voice Narrator + Voice Mic */}
-      <View style={styles.controlsRow}>
-        {/* Language Selector Chips */}
-        <View style={styles.langChips}>
-          {languages.map((l) => (
-            <TouchableOpacity
-              key={l.code}
-              style={[styles.langChip, lang === l.code && styles.langChipActive]}
-              onPress={() => onSetLang(l.code)}
-              activeOpacity={0.7}
-            >
-              <Text
-                style={[
-                  styles.langChipText,
-                  lang === l.code && styles.langChipTextActive,
-                ]}
-              >
-                {l.label}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-
-        {/* Voice Features (Narrator + Mic + Full Voice Assistant) */}
-        <View style={styles.voiceGroup}>
-          <VoiceNarrator textToSpeak={defaultNarration} lang={lang} />
-          {onVoiceTranscript && (
-            <VoiceMicButton onTranscript={onVoiceTranscript} lang={lang} size={30} />
-          )}
-          {onOpenVoiceAssistant && (
-            <TouchableOpacity
-              style={styles.assistantTriggerBtn}
-              onPress={onOpenVoiceAssistant}
-              activeOpacity={0.7}
-            >
-              <Ionicons name="sparkles" size={13} color="#ffffff" />
-              <Text style={styles.assistantTriggerText}>
-                {lang === 'en' ? 'Voice AI' : lang === 'mr' ? 'आवाज AI' : lang === 'ta' ? 'குரல் AI' : lang === 'te' ? 'వాయిస్ AI' : 'वॉइस AI'}
-              </Text>
-            </TouchableOpacity>
-          )}
-        </View>
-      </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  safeArea: {
     backgroundColor: COLORS.white,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.border,
-    paddingHorizontal: SPACING.md,
-    paddingTop: SPACING.xs,
-    paddingBottom: SPACING.xs,
     zIndex: 50,
+  },
+  container: {
+    backgroundColor: COLORS.white,
+    paddingHorizontal: SPACING.md,
+    paddingVertical: SPACING.xs + 2,
   },
   topRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 6,
   },
   brandGroup: {
     flexDirection: 'row',
@@ -233,39 +178,6 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     color: COLORS.textPrimary,
   },
-  rolePill: {
-    paddingHorizontal: 6,
-    paddingVertical: 1,
-    borderRadius: RADIUS.full,
-  },
-  rolePillEnt: {
-    backgroundColor: '#ecfdf5',
-    borderWidth: 1,
-    borderColor: '#a7f3d0',
-  },
-  rolePillIas: {
-    backgroundColor: '#fef3c7',
-    borderWidth: 1,
-    borderColor: '#fcd34d',
-  },
-  rolePillVdo: {
-    backgroundColor: '#f3e8ff',
-    borderWidth: 1,
-    borderColor: '#d8b4fe',
-  },
-  rolePillText: {
-    fontSize: 9,
-    fontWeight: '800',
-  },
-  rolePillTextEnt: {
-    color: '#047857',
-  },
-  rolePillTextIas: {
-    color: '#b45309',
-  },
-  rolePillTextVdo: {
-    color: '#6b21a8',
-  },
   locationSub: {
     fontSize: 10,
     color: COLORS.textTertiary,
@@ -273,26 +185,11 @@ const styles = StyleSheet.create({
   actionsRight: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
-  },
-  switchRoleBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 3,
-    backgroundColor: '#f8fafc',
-    borderWidth: 1,
-    borderColor: '#e2e8f0',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: RADIUS.sm,
-  },
-  switchRoleText: {
-    fontSize: 10,
-    fontWeight: '700',
+    gap: 8,
   },
   logoutBtn: {
-    width: 28,
-    height: 28,
+    width: 30,
+    height: 30,
     borderRadius: RADIUS.sm,
     backgroundColor: '#fee2e2',
     justifyContent: 'center',
@@ -300,53 +197,60 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#fecaca',
   },
-  controlsRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingTop: 4,
-    borderTopWidth: 1,
-    borderTopColor: '#f1f5f9',
+  langDropdownContainer: {
+    position: 'relative',
+    zIndex: 100,
   },
-  langChips: {
+  langDropdownBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-  },
-  langChip: {
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: RADIUS.xs,
     backgroundColor: '#f1f5f9',
+    borderWidth: 1,
+    borderColor: '#e2e8f0',
+    paddingHorizontal: 8,
+    paddingVertical: 5,
+    borderRadius: RADIUS.md,
   },
-  langChipActive: {
-    backgroundColor: COLORS.primary,
-  },
-  langChipText: {
-    fontSize: 10,
+  langDropdownText: {
+    fontSize: 11,
     fontWeight: '700',
+    color: COLORS.textPrimary,
+  },
+  langDropdownMenu: {
+    position: 'absolute',
+    top: 34,
+    right: 0,
+    backgroundColor: COLORS.white,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    borderRadius: RADIUS.md,
+    paddingVertical: 4,
+    minWidth: 110,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 8,
+    zIndex: 100,
+  },
+  langDropdownOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+  },
+  langDropdownOptionActive: {
+    backgroundColor: '#ecfdf5',
+  },
+  langDropdownOptionText: {
+    fontSize: 11,
+    fontWeight: '600',
     color: COLORS.textSecondary,
   },
-  langChipTextActive: {
-    color: COLORS.white,
-  },
-  voiceGroup: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-  },
-  assistantTriggerBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 3,
-    backgroundColor: '#7c3aed',
-    paddingHorizontal: 7,
-    paddingVertical: 4,
-    borderRadius: RADIUS.full,
-  },
-  assistantTriggerText: {
-    fontSize: 10,
-    fontWeight: '700',
-    color: '#ffffff',
+  langDropdownOptionTextActive: {
+    fontWeight: '800',
+    color: COLORS.primary,
   },
 });

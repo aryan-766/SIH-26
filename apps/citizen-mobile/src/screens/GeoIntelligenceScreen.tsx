@@ -107,7 +107,7 @@ export const GeoIntelligenceScreen: React.FC<Props> = ({ officerProfile, lang })
   });
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
+    <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
         {/* Header */}
         <View style={styles.header}>
@@ -306,7 +306,7 @@ export const GeoIntelligenceScreen: React.FC<Props> = ({ officerProfile, lang })
           ))}
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 

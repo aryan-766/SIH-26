@@ -134,7 +134,7 @@ export const DiscoveryScreen: React.FC<Props> = ({ userProfile, lang }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
+    <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
         {/* Header Title */}
         <View style={styles.header}>
@@ -340,7 +340,7 @@ export const DiscoveryScreen: React.FC<Props> = ({ userProfile, lang }) => {
           </View>
         )}
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 

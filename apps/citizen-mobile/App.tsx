@@ -8,7 +8,7 @@ import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StatusBar } from 'expo-status-bar';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 
 import { AppHeader } from './src/components/AppHeader';
@@ -35,6 +35,15 @@ import { COLORS, RADIUS } from './src/theme';
 const Tab = createBottomTabNavigator();
 
 export default function App() {
+  return (
+    <SafeAreaProvider>
+      <MainAppContent />
+    </SafeAreaProvider>
+  );
+}
+
+function MainAppContent() {
+  const insets = useSafeAreaInsets();
   const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [appRole, setAppRole] = useState<'entrepreneur' | 'official'>('entrepreneur');
   const [lang, setLang] = useState<Language>('hi');
@@ -78,21 +87,28 @@ export default function App() {
 
   if (!isAuthenticated) {
     return (
-      <SafeAreaProvider>
+      <>
         <StatusBar style="dark" />
         <AuthScreen
           lang={lang}
           onSetLang={setLang}
           onLogin={handleLogin}
         />
-      </SafeAreaProvider>
+      </>
     );
   }
 
   const isEn = lang === 'en';
+  const dynamicTabBarStyle = [
+    styles.tabBar,
+    {
+      height: 58 + Math.max(insets.bottom, 6),
+      paddingBottom: Math.max(insets.bottom, 4),
+    },
+  ];
 
   return (
-    <SafeAreaProvider>
+    <>
       <StatusBar style="dark" />
       <View style={styles.root}>
         {/* Universal Top Header with Language Switcher, Voice Narrator, Role Toggle & Logout */}
@@ -117,7 +133,7 @@ export default function App() {
             <Tab.Navigator
               screenOptions={({ route }) => ({
                 headerShown: false,
-                tabBarStyle: styles.tabBar,
+                tabBarStyle: dynamicTabBarStyle,
                 tabBarActiveTintColor: COLORS.primary,
                 tabBarInactiveTintColor: COLORS.tabInactive,
                 tabBarLabelStyle: styles.tabLabel,
@@ -208,7 +224,7 @@ export default function App() {
             <Tab.Navigator
               screenOptions={({ route }) => ({
                 headerShown: false,
-                tabBarStyle: styles.tabBar,
+                tabBarStyle: dynamicTabBarStyle,
                 tabBarActiveTintColor: COLORS.accent,
                 tabBarInactiveTintColor: COLORS.tabInactive,
                 tabBarLabelStyle: styles.tabLabel,
@@ -288,7 +304,7 @@ export default function App() {
 
         {/* Quick Floating Voice Assistant FAB */}
         <TouchableOpacity
-          style={styles.floatingFab}
+          style={[styles.floatingFab, { bottom: 68 + Math.max(insets.bottom, 6) }]}
           onPress={() => setVoiceModalVisible(true)}
           activeOpacity={0.85}
         >
@@ -308,7 +324,7 @@ export default function App() {
           onProfileUpdated={(updated) => setUserProfile(updated)}
         />
       </View>
-    </SafeAreaProvider>
+    </>
   );
 }
 
@@ -321,8 +337,6 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
     borderTopWidth: 1,
     borderTopColor: COLORS.border,
-    height: 58,
-    paddingBottom: 4,
     paddingTop: 4,
   },
   tabLabel: {
@@ -345,7 +359,6 @@ const styles = StyleSheet.create({
   },
   floatingFab: {
     position: 'absolute',
-    bottom: 70,
     right: 16,
     flexDirection: 'row',
     alignItems: 'center',

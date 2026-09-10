@@ -44,7 +44,7 @@ export const OverviewScreen: React.FC<Props> = ({ userProfile, lang }) => {
   ];
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
+    <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
 
         {/* Profile Header */}
@@ -146,7 +146,7 @@ export const OverviewScreen: React.FC<Props> = ({ userProfile, lang }) => {
 
         <View style={{ height: 20 }} />
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 

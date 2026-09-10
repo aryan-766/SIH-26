@@ -41,7 +41,7 @@ export const ProfileScreen: React.FC<Props> = ({
   ];
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
+    <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
         <Text style={styles.screenTitle}>{isEn ? 'Profile & Enterprise Hub' : 'प्रोफ़ाइल एवं उद्यम केंद्र'}</Text>
 
@@ -231,7 +231,7 @@ export const ProfileScreen: React.FC<Props> = ({
           onBack={() => setShowHelpModal(false)}
         />
       </Modal>
-    </SafeAreaView>
+    </View>
   );
 };
 

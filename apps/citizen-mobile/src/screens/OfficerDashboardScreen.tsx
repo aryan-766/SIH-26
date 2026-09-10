@@ -170,7 +170,7 @@ export const OfficerDashboardScreen: React.FC<Props> = ({
   });
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
+    <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
         {/* Top Magisterial Officer Identity Card */}
         <View style={[styles.headerCard, isIas && styles.headerCardIas]}>
@@ -807,7 +807,7 @@ export const OfficerDashboardScreen: React.FC<Props> = ({
           </View>
         </Modal>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 

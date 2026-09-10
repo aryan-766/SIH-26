@@ -169,7 +169,7 @@ export const SchemesScreen: React.FC<Props> = ({ userProfile, lang }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
+    <View style={styles.container}>
       {/* Title */}
       <View style={styles.titleRow}>
         <Text style={styles.screenTitle}>
@@ -222,7 +222,7 @@ export const SchemesScreen: React.FC<Props> = ({ userProfile, lang }) => {
           </View>
         }
       />
-    </SafeAreaView>
+    </View>
   );
 };
 

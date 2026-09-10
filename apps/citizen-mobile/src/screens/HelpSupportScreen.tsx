@@ -60,7 +60,7 @@ export const HelpSupportScreen: React.FC<Props> = ({ userProfile, lang, onBack }
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
+    <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
         {/* Header */}
         <View style={styles.header}>
@@ -414,7 +414,7 @@ export const HelpSupportScreen: React.FC<Props> = ({ userProfile, lang, onBack }
           </View>
         )}
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 

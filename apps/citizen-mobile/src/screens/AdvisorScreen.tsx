@@ -103,7 +103,7 @@ export const AdvisorScreen: React.FC<Props> = ({ userProfile, lang }) => {
   const officer = DEFAULT_FIELD_OFFICER;
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
+    <View style={styles.container}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         style={{ flex: 1 }}
@@ -274,7 +274,7 @@ export const AdvisorScreen: React.FC<Props> = ({ userProfile, lang }) => {
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </View>
   );
 };
 
