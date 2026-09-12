@@ -27,9 +27,10 @@ import { ProfileScreen } from './src/screens/ProfileScreen';
 
 import {
   BeneficiaryProfile, OfficerProfile,
-  DEFAULT_FIELD_OFFICER, SEED_REGISTERED_ENTREPRENEURS
+  DEFAULT_FIELD_OFFICER, SEED_REGISTERED_ENTREPRENEURS,
+  detectLanguageFromProfile
 } from './src/services/enterpriseStore';
-import { Language } from './src/locales';
+import { Language, translations } from './src/locales';
 import { COLORS, RADIUS } from './src/theme';
 
 const Tab = createBottomTabNavigator();
@@ -46,14 +47,16 @@ function MainAppContent() {
   const insets = useSafeAreaInsets();
   const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [appRole, setAppRole] = useState<'entrepreneur' | 'official'>('entrepreneur');
-  const [lang, setLang] = useState<Language>('hi');
-  const [voiceModalVisible, setVoiceModalVisible] = useState(false);
-  const [activeScreenName, setActiveScreenName] = useState('overview');
-
   // Pre-seed active session with Ramesh Yadav so app never loads blank
   const [userProfile, setUserProfile] = useState<BeneficiaryProfile | null>(
     SEED_REGISTERED_ENTREPRENEURS[0].profile
   );
+  // Auto-detect language from profile's state/village/district
+  const [lang, setLang] = useState<Language>(() =>
+    detectLanguageFromProfile(SEED_REGISTERED_ENTREPRENEURS[0].profile)
+  );
+  const [voiceModalVisible, setVoiceModalVisible] = useState(false);
+  const [activeScreenName, setActiveScreenName] = useState('overview');
   const [officerProfile, setOfficerProfile] = useState<OfficerProfile | null>(
     DEFAULT_FIELD_OFFICER
   );
@@ -64,7 +67,12 @@ function MainAppContent() {
     officer: OfficerProfile | null
   ) => {
     setAppRole(role);
-    if (profile) setUserProfile(profile);
+    if (profile) {
+      setUserProfile(profile);
+      // Auto-detect language from user's state registration (e.g., TN → Tamil, MH → Marathi)
+      const detectedLang = detectLanguageFromProfile(profile);
+      setLang(detectedLang);
+    }
     if (officer) setOfficerProfile(officer);
     setIsAuthenticated(true);
   }, []);
@@ -157,14 +165,21 @@ function MainAppContent() {
             >
               <Tab.Screen
                 name="Overview"
-                options={{ tabBarLabel: isEn ? 'Overview' : 'अवलोकन' }}
+                options={{ tabBarLabel: translations[lang]?.navCopilot ? (lang === 'en' ? 'Overview' : lang === 'mr' ? 'आढावा' : lang === 'ta' ? 'கண்ணோட்டம்' : lang === 'te' ? 'అవలోకనం' : 'अवलोकन') : 'अवलोकन' }}
               >
-                {() => <OverviewScreen userProfile={userProfile} lang={lang} />}
+                {({ navigation }: any) => (
+                  <OverviewScreen
+                    userProfile={userProfile}
+                    lang={lang}
+                    onNavigateToDiscovery={() => navigation.navigate('Discovery')}
+                    onNavigateToFinance={() => navigation.navigate('Finance')}
+                  />
+                )}
               </Tab.Screen>
 
               <Tab.Screen
                 name="Finance"
-                options={{ tabBarLabel: isEn ? 'Finance & DPR' : 'वित्त व DPR' }}
+                options={{ tabBarLabel: translations[lang]?.navFinances || 'वित्त व DPR' }}
               >
                 {() => <FinanceScreen userProfile={userProfile} lang={lang} />}
               </Tab.Screen>
@@ -172,7 +187,7 @@ function MainAppContent() {
               <Tab.Screen
                 name="Schemes"
                 options={{
-                  tabBarLabel: isEn ? 'Schemes' : 'योजनाएं',
+                  tabBarLabel: translations[lang]?.navSchemes || 'योजनाएं',
                   tabBarIcon: ({ focused, color }) => (
                     <View style={focused ? styles.schemeIconActive : undefined}>
                       <Ionicons
@@ -184,26 +199,38 @@ function MainAppContent() {
                   ),
                 }}
               >
-                {() => <SchemesScreen userProfile={userProfile} lang={lang} />}
+                {({ navigation }: any) => (
+                  <SchemesScreen
+                    userProfile={userProfile}
+                    lang={lang}
+                    onNavigateToFinance={() => navigation.navigate('Finance')}
+                  />
+                )}
               </Tab.Screen>
 
               <Tab.Screen
                 name="Discovery"
-                options={{ tabBarLabel: isEn ? 'Discovery' : 'खोज' }}
+                options={{ tabBarLabel: translations[lang]?.navDiscovery || 'खोज' }}
               >
-                {() => <DiscoveryScreen userProfile={userProfile} lang={lang} />}
+                {({ navigation }: any) => (
+                  <DiscoveryScreen
+                    userProfile={userProfile}
+                    lang={lang}
+                    onNavigateToFinance={() => navigation.navigate('Finance')}
+                  />
+                )}
               </Tab.Screen>
 
               <Tab.Screen
                 name="Advisor"
-                options={{ tabBarLabel: isEn ? 'AI Advisor' : 'AI सलाह' }}
+                options={{ tabBarLabel: translations[lang]?.navAdvisor || 'AI सलाह' }}
               >
                 {() => <AdvisorScreen userProfile={userProfile} lang={lang} />}
               </Tab.Screen>
 
               <Tab.Screen
                 name="Profile"
-                options={{ tabBarLabel: isEn ? 'Profile' : 'प्रोफ़ाइल' }}
+                options={{ tabBarLabel: translations[lang]?.myProfile || 'प्रोफ़ाइल' }}
               >
                 {() => (
                   <ProfileScreen

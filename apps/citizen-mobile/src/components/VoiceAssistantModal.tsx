@@ -40,6 +40,109 @@ interface Props {
   onProfileUpdated?: (updated: BeneficiaryProfile) => void;
 }
 
+const VOICE_MODAL_TRANSLATIONS = {
+  hi: {
+    title: 'ग्रामउद्यम वॉइस सहायक',
+    subtitle: 'स्क्रीन का पूरा विवरण समझाएं • आपकी बातें समझकर प्रविष्टि दर्ज करें',
+    tabExplain: 'स्क्रीन का विवरण समझाएं',
+    tabInteract: 'बोलकर प्रविष्टि करें',
+    stop: 'रोकें',
+    currentScreen: 'वर्तमान स्क्रीन:',
+    listenAgain: 'पुनः सुनें',
+    wantToChange: 'कुछ नया बदलना या दर्ज करना चाहते हैं?',
+    wantToChangeSub: 'यहाँ टैप कर बोलें: जैसे "मेरा बजट 5 लाख कर दो"',
+    tapToSpeak: 'बोलने के लिए माइक दबाएं',
+    listening: 'सुन रहा हूँ... अपनी बात या प्रविष्टि बोलिए',
+    typePlaceholder: 'या यहाँ लिखें: "बजट 5 लाख करो", "3500 की दूध बिक्री लिखो"',
+    entryRecorded: '✓ प्रविष्टि सफलतापूर्वक सिस्टम में दर्ज',
+    listenResponse: 'उत्तर सुनें',
+    stopVoice: 'आवाज़ रोकें',
+    quickPrompts: 'त्वरित आवाज़ संकेत (टैप कर बोलें):',
+    explainingStatus: 'स्क्रीन की जानकारी पढ़कर समझाई जा रही है...',
+    finishStatus: 'विवरण पूरा हुआ।',
+  },
+  en: {
+    title: 'GramUdyam Voice Copilot',
+    subtitle: 'Explains all screen text • Understands & records your data',
+    tabExplain: 'Explain Screen Text',
+    tabInteract: 'Speak / Make Entry',
+    stop: 'Stop',
+    currentScreen: 'CURRENT SCREEN:',
+    listenAgain: 'Listen Again',
+    wantToChange: 'Want to change or add something?',
+    wantToChangeSub: 'Tap here and speak: e.g., "Change my budget to 5 lakh"',
+    tapToSpeak: 'Tap microphone to speak',
+    listening: 'Listening... Speak your details now',
+    typePlaceholder: 'Or type: "Set budget to 5 lakh", "Record 3500 sales"',
+    entryRecorded: '✓ ENTRY RECORDED IN SYSTEM',
+    listenResponse: 'Listen Response',
+    stopVoice: 'Stop Voice',
+    quickPrompts: 'Quick Voice Actions (Tap to speak):',
+    explainingStatus: 'Explaining screen details aloud...',
+    finishStatus: 'Screen explanation finished.',
+  },
+  mr: {
+    title: 'ग्रामउद्यम व्हॉइस सहाय्यक',
+    subtitle: 'स्क्रीनवरील सर्व मजकूर समजावून सांगा • बोलून थेट नोंद करा',
+    tabExplain: 'स्क्रीनची माहिती समजावून सांगा',
+    tabInteract: 'बोलून नोंद करा',
+    stop: 'थांबवा',
+    currentScreen: 'सध्याची स्क्रीन:',
+    listenAgain: 'पुन्हा ऐका',
+    wantToChange: 'काही बदल किंवा नवीन नोंद करायची आहे?',
+    wantToChangeSub: 'येथे टॅप करून बोला: जसे "माझा बजेट ५ लाख करा"',
+    tapToSpeak: 'बोलण्यासाठी माइक दाबा',
+    listening: 'ऐकत आहे... आपली माहिती बोला',
+    typePlaceholder: 'किंवा येथे टाइप करा: "बजेट ५ लाख करा", "दूध विक्री ३५०० नोंदवा"',
+    entryRecorded: '✓ नोंद प्रणालीत यशस्वीरित्या जतन झाली',
+    listenResponse: 'उत्तर ऐका',
+    stopVoice: 'आवाज थांबवा',
+    quickPrompts: 'जलद व्हॉइस कृती (टॅप करून बोला):',
+    explainingStatus: 'स्क्रीनवरील माहिती वाचून समजावून सांगितली जात आहे...',
+    finishStatus: 'माहिती पूर्ण झाली.',
+  },
+  ta: {
+    title: 'கிராம்உத்யோக் குரல் வழிகாட்டி',
+    subtitle: 'திரை தகவல்களை விளக்குகிறது • உங்கள் பேச்சை புரிந்து பதிவு செய்கிறது',
+    tabExplain: 'திரை விவரங்களை விளக்குக',
+    tabInteract: 'பேசி பதிவு செய்க',
+    stop: 'நிறுத்து',
+    currentScreen: 'தற்போதைய திரை:',
+    listenAgain: 'மீண்டும் கேட்க',
+    wantToChange: 'புதிய மாற்றங்கள் அல்லது பதிவுகள் செய்ய வேண்டுமா?',
+    wantToChangeSub: 'இங்கு தட்டி பேசுங்கள்: "திட்ட செலவை 5 லட்சம் ஆக்குக"',
+    tapToSpeak: 'பேச மைக்ரோஃபோனைத் தொடவும்',
+    listening: 'கேட்கிறது... உங்கள் விவரங்களை பேசுங்கள்',
+    typePlaceholder: 'அல்லது தட்டச்சு செய்க: "பட்ஜெட் 5 லட்சம் செய்", "பால் விற்பனை 3500"',
+    entryRecorded: '✓ பதிவு வெற்றிகரமாக சேர்க்கப்பட்டது',
+    listenResponse: 'பதிலை கேட்க',
+    stopVoice: 'குரலை நிறுத்து',
+    quickPrompts: 'விரைவு குரல் கட்டளைகள்:',
+    explainingStatus: 'திரை விவரங்கள் வாசித்து விளக்கப்படுகின்றன...',
+    finishStatus: 'விளக்கம் முடிந்தது.',
+  },
+  te: {
+    title: 'గ్రామ్‌ఉద్యమ్ వాయిస్ కోపైలట్',
+    subtitle: 'స్క్రీన్ సమాచారాన్ని వివరిస్తుంది • మాట్లాడి వివరాలను నమోదు చేయండి',
+    tabExplain: 'స్క్రీన్ వివరాలను వివరించండి',
+    tabInteract: 'మాట్లాడి నమోదు చేయండి',
+    stop: 'ఆపు',
+    currentScreen: 'ప్రస్తుత స్క్రీన్:',
+    listenAgain: 'మళ్లీ వినండి',
+    wantToChange: 'ఏదైనా మార్చాలనుకుంటున్నారా లేదా నమోదు చేయాలనుకుంటున్నారా?',
+    wantToChangeSub: 'ఇక్కడ నొక్కి మాట్లాడండి: ఉదా. "నా బడ్జెట్ 5 లక్షలు చేయండి"',
+    tapToSpeak: 'మాట్లాడటానికి మైక్‌ను తాకండి',
+    listening: 'వింటున్నాను... మీ వివరాలను మాట్లాడండి',
+    typePlaceholder: 'లేదా ఇక్కడ టైప్ చేయండి: "బడ్జెట్ 5 లక్షలు చేయండి", "పాల అమ్మకాలు 3500"',
+    entryRecorded: '✓ నమోదు విజయవంతంగా వ్యవస్థలో చేర్చబడింది',
+    listenResponse: 'సమాధానం వినండి',
+    stopVoice: 'వాయిస్ ఆపు',
+    quickPrompts: 'త్వరిత వాయిస్ చర్యలు:',
+    explainingStatus: 'స్క్రీన్ వివరాలు చదివి వివరించబడుతున్నాయి...',
+    finishStatus: 'వివరణ పూర్తయింది.',
+  },
+};
+
 export const VoiceAssistantModal: React.FC<Props> = ({
   visible,
   onClose,
@@ -48,6 +151,7 @@ export const VoiceAssistantModal: React.FC<Props> = ({
   userProfile,
   onProfileUpdated
 }) => {
+  const vt = VOICE_MODAL_TRANSLATIONS[lang] || VOICE_MODAL_TRANSLATIONS.hi;
   const isEn = lang === 'en';
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -85,7 +189,7 @@ export const VoiceAssistantModal: React.FC<Props> = ({
     if (!screenExplanation) return;
     setActiveTab('explain');
     setIsSpeaking(true);
-    setStatusMessage(isEn ? 'Explaining screen details aloud...' : 'स्क्रीन की जानकारी पढ़कर समझाई जा रही है...');
+    setStatusMessage(vt.explainingStatus);
 
     speakAudio(
       screenExplanation.spokenText,
@@ -93,7 +197,7 @@ export const VoiceAssistantModal: React.FC<Props> = ({
       () => setIsSpeaking(true),
       () => {
         setIsSpeaking(false);
-        setStatusMessage(isEn ? 'Screen explanation finished.' : 'विवरण पूरा हुआ।');
+        setStatusMessage(vt.finishStatus);
       }
     );
   };
@@ -113,7 +217,7 @@ export const VoiceAssistantModal: React.FC<Props> = ({
         const randomQuery = quickList[Math.floor(Math.random() * quickList.length)];
         setTranscript(randomQuery);
         setIsListening(true);
-        setStatusMessage(isEn ? 'Receiving speech input...' : 'ध्वनि इनपुट ग्रहण किया जा रहा है...');
+        setStatusMessage(vt.listening);
 
         setTimeout(() => {
           setIsListening(false);
@@ -137,7 +241,7 @@ export const VoiceAssistantModal: React.FC<Props> = ({
 
         recognition.onstart = () => {
           setIsListening(true);
-          setStatusMessage(isEn ? 'Listening... Speak your command or query now' : 'सुन रहा हूँ... अपनी बात या प्रविष्टि बोलें');
+          setStatusMessage(vt.listening);
         };
 
         recognition.onresult = (event: any) => {
@@ -219,18 +323,12 @@ export const VoiceAssistantModal: React.FC<Props> = ({
               </View>
               <View>
                 <View style={styles.titleRow}>
-                  <Text style={styles.title}>
-                    {isEn ? 'GramUdyam Voice Copilot' : 'ग्रामउद्यम वॉइस सहायक'}
-                  </Text>
+                  <Text style={styles.title}>{vt.title}</Text>
                   <View style={styles.langBadge}>
                     <Text style={styles.langBadgeText}>{getLanguageCode(lang)}</Text>
                   </View>
                 </View>
-                <Text style={styles.subtitle}>
-                  {isEn
-                    ? 'Explains all screen text • Understands & records your data'
-                    : 'स्क्रीन का पूरा विवरण समझाएं • आपकी बातें समझकर प्रविष्टि दर्ज करें'}
-                </Text>
+                <Text style={styles.subtitle}>{vt.subtitle}</Text>
               </View>
             </View>
             <TouchableOpacity onPress={onClose} style={styles.closeBtn} activeOpacity={0.7}>
@@ -253,7 +351,7 @@ export const VoiceAssistantModal: React.FC<Props> = ({
               <Text
                 style={[styles.tabBtnText, activeTab === 'explain' && styles.tabBtnTextActive]}
               >
-                {isEn ? 'Explain Screen Text' : 'स्क्रीन का विवरण समझाएं'}
+                {vt.tabExplain}
               </Text>
             </TouchableOpacity>
 
@@ -270,7 +368,7 @@ export const VoiceAssistantModal: React.FC<Props> = ({
               <Text
                 style={[styles.tabBtnText, activeTab === 'interact' && styles.tabBtnTextActive]}
               >
-                {isEn ? 'Speak / Make Entry' : 'बोलकर प्रविष्टि करें'}
+                {vt.tabInteract}
               </Text>
             </TouchableOpacity>
           </View>
@@ -289,7 +387,7 @@ export const VoiceAssistantModal: React.FC<Props> = ({
               {isSpeaking && (
                 <TouchableOpacity onPress={handleStopSpeaking} style={styles.stopAudioBtn}>
                   <Ionicons name="stop-circle" size={16} color="#b45309" />
-                  <Text style={styles.stopAudioText}>{isEn ? 'Stop' : 'रोकें'}</Text>
+                  <Text style={styles.stopAudioText}>{vt.stop}</Text>
                 </TouchableOpacity>
               )}
             </View>
@@ -301,7 +399,7 @@ export const VoiceAssistantModal: React.FC<Props> = ({
               <View style={styles.explainContainer}>
                 <View style={styles.screenBadgeRow}>
                   <Text style={styles.screenBadge}>
-                    {isEn ? `CURRENT SCREEN: ${currentScreenName.toUpperCase()}` : `वर्तमान स्क्रीन: ${currentScreenName.toUpperCase()}`}
+                    {`${vt.currentScreen} ${currentScreenName.toUpperCase()}`}
                   </Text>
                   <TouchableOpacity
                     onPress={handleExplainScreen}
@@ -309,7 +407,7 @@ export const VoiceAssistantModal: React.FC<Props> = ({
                     activeOpacity={0.7}
                   >
                     <Ionicons name="play" size={12} color={COLORS.primary} />
-                    <Text style={styles.reSpeakText}>{isEn ? 'Listen Again' : 'पुनः सुनें'}</Text>
+                    <Text style={styles.reSpeakText}>{vt.listenAgain}</Text>
                   </TouchableOpacity>
                 </View>
 
@@ -334,14 +432,8 @@ export const VoiceAssistantModal: React.FC<Props> = ({
                 >
                   <Ionicons name="mic-circle" size={24} color={COLORS.primary} />
                   <View style={{ flex: 1 }}>
-                    <Text style={styles.switchPromptTitle}>
-                      {isEn ? 'Want to change or add something?' : 'कुछ नया बदलना या दर्ज करना चाहते हैं?'}
-                    </Text>
-                    <Text style={styles.switchPromptSub}>
-                      {isEn
-                        ? 'Tap here and speak: e.g., "Change my budget to 5 lakh"'
-                        : 'यहाँ टैप कर बोलें: जैसे "मेरा बजट 5 लाख कर दो" या "आज 3500 की बिक्री लिखो"'}
-                    </Text>
+                    <Text style={styles.switchPromptTitle}>{vt.wantToChange}</Text>
+                    <Text style={styles.switchPromptSub}>{vt.wantToChangeSub}</Text>
                   </View>
                   <Ionicons name="chevron-forward" size={16} color={COLORS.primary} />
                 </TouchableOpacity>
@@ -365,9 +457,7 @@ export const VoiceAssistantModal: React.FC<Props> = ({
                     />
                   </TouchableOpacity>
                   <Text style={styles.micInstruction}>
-                    {isListening
-                      ? (isEn ? 'Listening... Speak your details now' : 'सुन रहा हूँ... अपनी बात या प्रविष्टि बोलिए')
-                      : (isEn ? 'Tap microphone to speak' : 'बोलने के लिए माइक दबाएं')}
+                    {isListening ? vt.listening : vt.tapToSpeak}
                   </Text>
                 </View>
 
@@ -375,11 +465,7 @@ export const VoiceAssistantModal: React.FC<Props> = ({
                 <View style={styles.transcriptBox}>
                   <TextInput
                     style={styles.textInput}
-                    placeholder={
-                      isEn
-                        ? 'Or type: "Set budget to 5 lakh", "Record 3500 sales", "Call VDO"'
-                        : 'या यहाँ लिखें: "बजट 5 लाख करो", "3500 की दूध बिक्री लिखो", "VDO को बुलाओ"'
-                    }
+                    placeholder={vt.typePlaceholder}
                     placeholderTextColor={COLORS.textMuted}
                     value={transcript}
                     onChangeText={setTranscript}
@@ -402,9 +488,7 @@ export const VoiceAssistantModal: React.FC<Props> = ({
                     {commandResult.entryMade && (
                       <View style={styles.entryMadeBadge}>
                         <Ionicons name="checkmark-circle" size={16} color="#047857" />
-                        <Text style={styles.entryMadeText}>
-                          {isEn ? '✓ ENTRY RECORDED IN SYSTEM' : '✓ प्रविष्टि सफलतापूर्वक सिस्टम में दर्ज'}
-                        </Text>
+                        <Text style={styles.entryMadeText}>{vt.entryRecorded}</Text>
                       </View>
                     )}
 
@@ -432,9 +516,7 @@ export const VoiceAssistantModal: React.FC<Props> = ({
                         activeOpacity={0.7}
                       >
                         <Ionicons name="volume-high" size={14} color={COLORS.primary} />
-                        <Text style={styles.playAudioChipText}>
-                          {isEn ? 'Listen Response' : 'उत्तर सुनें'}
-                        </Text>
+                        <Text style={styles.playAudioChipText}>{vt.listenResponse}</Text>
                       </TouchableOpacity>
 
                       {isSpeaking && (
@@ -444,9 +526,7 @@ export const VoiceAssistantModal: React.FC<Props> = ({
                           activeOpacity={0.7}
                         >
                           <Ionicons name="stop" size={14} color="#b45309" />
-                          <Text style={styles.stopAudioChipText}>
-                            {isEn ? 'Stop Voice' : 'आवाज़ रोकें'}
-                          </Text>
+                          <Text style={styles.stopAudioChipText}>{vt.stopVoice}</Text>
                         </TouchableOpacity>
                       )}
                     </View>
@@ -455,9 +535,7 @@ export const VoiceAssistantModal: React.FC<Props> = ({
 
                 {/* Quick Voice Chips */}
                 <View style={styles.quickPromptSection}>
-                  <Text style={styles.quickPromptHeader}>
-                    {isEn ? 'Try saying or tapping one of these:' : 'बोलने के उदाहरण (टैप करके भी चला सकते हैं):'}
-                  </Text>
+                  <Text style={styles.quickPromptHeader}>{vt.quickPrompts}</Text>
                   <View style={styles.quickChipsGrid}>
                     {quickPrompts.map((prompt, idx) => (
                       <TouchableOpacity

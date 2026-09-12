@@ -153,6 +153,39 @@ export const getScreenVoiceExplanation = (
             'Direct Nodal Recommendation: VDO verified application bypasses branch red tape'
           ]
         };
+      } else if (lang === 'mr') {
+        return {
+          title: 'शासकीय योजना व सबसिडी माहिती',
+          spokenText: 'आपण शासकीय योजना स्क्रीनवर आहात. PMEGP योजनेअंतर्गत ग्रामीण सूक्ष्म उद्योगांना ३५ टक्के भांडवली सबसिडी मिळते. मुद्रा योजनेअंतर्गत १० लाख रुपयांपर्यंत विनातारण कर्ज मिळते. पीएम विश्वकर्मा योजनेत ५ टक्के सवलतीच्या दराने ३ लाख रुपयांचे कर्ज व टूलकिट अनुदान मिळते.',
+          displayText: [
+            'PMEGP: ग्रामीण भागात ३५% भांडवली सबसिडी',
+            'मुद्रा योजना: ₹१० लाखांपर्यंत विनातारण बँक कर्ज',
+            'पीएम विश्वकर्मा: ५% सवलतीच्या दरात ₹३ लाख कर्ज व ₹१५,००० टूलकिट अनुदान',
+            'नोडल अधिकारी संमती: अर्जाची थेट बँकेत पाठवणी'
+          ]
+        };
+      } else if (lang === 'ta') {
+        return {
+          title: 'அரசு திட்டங்கள் மற்றும் மானியங்கள்',
+          spokenText: 'நீங்கள் அரசு திட்டங்கள் திரையில் உள்ளீர்கள். PMEGP திட்டம் கிராமப்புற குறுந்தொழில்களுக்கு 35 சதவீத மூலதன மானியம் வழங்குகிறது. முத்ரா திட்டத்தில் பிணையமின்றி 10 லட்சம் வரை கடன் பெறலாம். பிஎம் விஸ்வகர்மா திட்டம் 5 சதவீத வட்டியில் 3 லட்சம் கடன் வழங்குகிறது.',
+          displayText: [
+            'PMEGP: கிராமப்புற மக்களுக்கு 35% மூலதன மானியம்',
+            'முத்ரா திட்டம்: பிணையமின்றி ₹10,00,000 வரை வங்கி கடன்',
+            'விஸ்வகர்மா திட்டம்: 5% குறைந்த வட்டியில் ₹3,00,000 கடன் மற்றும் உபகரண உதவி',
+            'நோடல் அதிகாரி பரிந்துரை: வங்கி கிளைக்கு நேரடி சமர்ப்பிப்பு'
+          ]
+        };
+      } else if (lang === 'te') {
+        return {
+          title: 'ప్రభుత్వ పథకాలు & సబ్సిడీల వివరాలు',
+          spokenText: 'మీరు ప్రభుత్వ పథకాల తెరపై ఉన్నారు. PMEGP పథకం ద్వారా గ్రామీణ సూక్ష్మ పరిశ్రమలకు 35 శాతం మూలధన సబ్సిడీ లభిస్తుంది. ముద్ర పథకం కింద ఎటువంటి హామీ లేకుండా 10 లక్షల రూపాయల వరకు రుణం లభిస్తుంది. పీఎం విశ్వకర్మ పథకంలో 5 శాతం రాయితీ వడ్డీతో 3 లక్షల రూపాయల రుణం లభిస్తుంది.',
+          displayText: [
+            'PMEGP: గ్రామీణ పారిశ్రామికవేత్తలకు 35% మూలధన సబ్సిడీ',
+            'ముద్రా యోజన: హామీ లేకుండా ₹10,00,000 వరకు బ్యాంక్ రుణం',
+            'విశ్వకర్మ పథకం: 5% రాయితీ వడ్డీతో ₹3,00,000 రుణం + ₹15,000 టూల్‌కిట్ గ్రాంట్',
+            'నోడల్ అధికారి సిఫార్సు: దరఖాస్తు నేరుగా బ్యాంక్ శాఖకు'
+          ]
+        };
       } else {
         return {
           title: 'सरकारी योजनाएं व सब्सिडी विवरण',
@@ -178,6 +211,39 @@ export const getScreenVoiceExplanation = (
             '5-10 km Facility Radar: Mandi, Banks, and Feed suppliers mapped in real-time'
           ]
         };
+      } else if (lang === 'mr') {
+        return {
+          title: 'उद्यम संधी शोध माहिती',
+          spokenText: `आपण स्थानिक व्यवसाय संधी शोध स्क्रीनवर आहात. ${village} मधील कच्चा माल आणि स्थानिक मागणीनुसार आपल्यासाठी अव्वल व्यवसाय दुग्ध व्यवसाय असून ८५ टक्के अनुकूलता गुण मिळाले आहेत. सहजनवा येथे २.१ किमी अंतरावर चिलिंग सेंटर उपलब्ध आहे.`,
+          displayText: [
+            'अव्वल निवड: दुग्ध व्यवसाय व संकलन केंद्र (८५% अनुकूलता)',
+            'पर्याय १: मधमाशी पालन व बॉटलिंग (७८% अनुकूलता)',
+            'पर्याय २: तेल घाणा व मसाला उद्योग (७२% अनुकूलता)',
+            '५-१० किमी रडार: बाजारपेठ, बँका आणि पुरवठादारांचे थेट मॅपिंग'
+          ]
+        };
+      } else if (lang === 'ta') {
+        return {
+          title: 'தொழில் வாய்ப்பு கண்டறிதல்',
+          spokenText: `நீங்கள் தொழில் வாய்ப்பு கண்டறியும் திரையில் உள்ளீர்கள். ${village} பகுதியில் உள்ள மூலப்பொருட்கள் மற்றும் தேவையின் அடிப்படையில் பால் பண்ணை தொழில் 85 சதவீத பொருத்தத்துடன் முதலிடத்தில் உள்ளது. 2.1 கிமீ தூரத்தில் பால் குளிரூட்டும் மையம் உள்ளது.`,
+          displayText: [
+            'முதல் தேர்வு: பால் பண்ணை மற்றும் சேகரிப்பு மையம் (85% பொருத்தம்)',
+            'மாற்று 1: தேனீ வளர்ப்பு மற்றும் பதப்படுத்துதல் (78% பொருத்தம்)',
+            'மாற்று 2: எண்ணெய் பிழிதல் மற்றும் மசாலா அரைத்தல் (72% பொருத்தம்)',
+            '5-10 கிமீ ரேடார்: சந்தை, வங்கி மற்றும் சப்ளையர் நேரடி வரைபடம்'
+          ]
+        };
+      } else if (lang === 'te') {
+        return {
+          title: 'వ్యాపార అవకాశాల గుర్తింపు',
+          spokenText: `మీరు వ్యాపార అవకాశాల గుర్తింపు తెరపై ఉన్నారు. ${village} పరిసరాల్లో లభించే ముడి సరుకులు మరియు డిమాండ్ ఆధారంగా పాడి పరిశ్రమ 85 శాతం అనుకూలతతో అగ్రస్థానంలో ఉంది. 2.1 కిమీ దూరంలో మిల్క్ చిల్లింగ్ కేంద్రం అందుబాటులో ఉంది.`,
+          displayText: [
+            'అగ్ర ఎంపిక: పాడి పరిశ్రమ & చిల్లింగ్ కేంద్రం (85% సరిపోలిక)',
+            'ప్రత్యామ్నాయం 1: తేనెటీగల పెంపకం & ప్యాకింగ్ (78% అనుకూలత)',
+            'ప్రత్యామ్నాయం 2: నూనె మిల్లు & మసాలా ప్రాసెసింగ్ (72% అనుకూలత)',
+            '5-10 కిమీ రాడార్: మార్కెట్, బ్యాంకులు మరియు సప్లయర్ల మ్యాపింగ్'
+          ]
+        };
       } else {
         return {
           title: 'उद्यम अवसर खोज विवरण',
@@ -200,6 +266,36 @@ export const getScreenVoiceExplanation = (
             'Assigned Nodal Officer: Sanjay Verma (VDO, Sahjanwa Block)',
             'AI Advisor Co-Pilot: 24/7 DPR assistance, compliance & financial simulation',
             'Action Available: Request site inspection, DPR physical review, or subsidy dispatch'
+          ]
+        };
+      } else if (lang === 'mr') {
+        return {
+          title: 'AI सल्लागार व नोडल अधिकारी डेस्क',
+          spokenText: `आपण AI सल्लागार आणि ग्राम नोडल अधिकारी डेस्कवर आहात. आपले ग्रामविकास अधिकारी संजय वर्मा आपल्या सहकार्यासाठी नियुक्त आहेत. आपण येथे डीपीआर पडताळणी व स्थळ पाहणीसाठी थेट विनंती करू शकता.`,
+          displayText: [
+            'नियुक्त नोडल अधिकारी: संजय वर्मा (VDO - सहजनवा ब्लॉक)',
+            'AI सहाय्यक: २४ तास डीपीआर मदत आणि शासकीय नियमांचे मार्गदर्शन',
+            'उपलब्ध सुविधा: स्थळ पाहणी (Site Inspection) व कर्ज मंजुरी विनंती'
+          ]
+        };
+      } else if (lang === 'ta') {
+        return {
+          title: 'AI ஆலோசகர் & கள அதிகாரி மையம்',
+          spokenText: `நீங்கள் AI ஆலோசகர் மற்றும் கிராம அதிகாரி மையத்தில் உள்ளீர்கள். உங்கள் கிராம வளர்ச்சி அதிகாரி சஞ்சய் வர்மா உங்களுக்கு உதவ நியமிக்கப்பட்டுள்ளார். உங்கள் திட்ட அறிக்கை சரிபார்ப்பு மற்றும் கள ஆய்வுக்கு நீங்கள் கோரிக்கை வைக்கலாம்.`,
+          displayText: [
+            'நியமிக்கப்பட்ட அதிகாரி: சஞ்சய் வர்மா (VDO)',
+            'AI வழிகாட்டி: 24 மணி நேர DPR உதவி மற்றும் அரசாங்க விதிகள்',
+            'செயல்பாடு: கள ஆய்வு மற்றும் வங்கி கடன் பரிந்துரை கோரிக்கை'
+          ]
+        };
+      } else if (lang === 'te') {
+        return {
+          title: 'AI సలహాదారు & ఫీల్డ్ ఆఫీసర్ డెస్క్',
+          spokenText: `మీరు AI సలహాదారు మరియు గ్రామ నోడల్ అధికారి డెస్క్‌లో ఉన్నారు. మీ గ్రామ అభివృద్ధి అధికారి సంజయ్ వర్మ మీకు సహాయం చేయడానికి సిద్ధంగా ఉన్నారు. మీరు DPR తనిఖీ మరియు సైట్ పరిశీలన కోసం అభ్యర్థించవచ్చు.`,
+          displayText: [
+            'కేటాయించిన నోడల్ అధికారి: సంజయ్ వర్మ (VDO)',
+            'AI సలహాదారు: 24/7 DPR సహాయం మరియు నిబంధనల మార్గదర్శనం',
+            'అందుబాటులో ఉన్న చర్య: సైట్ తనిఖీ మరియు బ్యాంక్ రుణ సిఫార్సు అభ్యర్థన'
           ]
         };
       } else {
@@ -312,10 +408,11 @@ export const processVoiceAssistantCommand = (
   // 1. BUDGET / CAPITAL / PROJECT COST ENTRY
   // e.g., "Mera budget 5 lakh hai", "Project cost 4 lakh karo", "Mera capital 120000 rupaye hai"
   if (
-    lower.includes('budget') || lower.includes('बजट') ||
+    lower.includes('budget') || lower.includes('बजट') || lower.includes('भांडवल') ||
     lower.includes('capital') || lower.includes('पूंजी') || lower.includes('लागत') ||
     lower.includes('cost') || lower.includes('investment') || lower.includes('निवेश') ||
-    lower.includes('రూపాయలు') || lower.includes('ரூபாய்')
+    lower.includes('రూపాయలు') || lower.includes('రూపాయల') || lower.includes('మూలధనం') ||
+    lower.includes('ரூபாய்') || lower.includes('மூலதனம்')
   ) {
     const amt = extractAmount(lower);
     if (amt && amt > 0) {
@@ -333,19 +430,31 @@ export const processVoiceAssistantCommand = (
       const subFormatted = `₹${subsidyAmt.toLocaleString('en-IN')}`;
       const emiFormatted = `₹${emiEst.toLocaleString('en-IN')}`;
 
-      const spoken = isEn
-        ? `Budget entry recorded. Your project capital has been updated to ${amtFormatted}. Under PMEGP, your 35 percent subsidy is ${subFormatted}, and estimated monthly EMI is ${emiFormatted}.`
-        : `प्रविष्टि दर्ज कर ली गई है। आपकी कुल प्रोजेक्ट पूंजी ${amtFormatted} सेट कर दी गई है। PMEGP के तहत 35% सब्सिडी ${subFormatted} मिलेगी, और मासिक EMI लगभग ${emiFormatted} बनेगी।`;
+      let spoken = '';
+      let written = '';
 
-      const written = isEn
-        ? `✓ New Entry Recorded: Project Capital set to ${amtFormatted}.\n• 35% PMEGP Subsidy: ${subFormatted}\n• Estimated Bank Loan: ₹${loanAmt.toLocaleString('en-IN')}\n• Monthly EMI: ${emiFormatted} (5 years)`
-        : `✓ नई प्रविष्टि सफलतापूर्वक दर्ज:\n• प्रोजेक्ट पूंजी/बजट: ${amtFormatted}\n• PMEGP 35% सरकारी सब्सिडी: ${subFormatted}\n• अनुमानित बैंक ऋण: ₹${loanAmt.toLocaleString('en-IN')}\n• मासिक ईएमआई: ${emiFormatted}/माह`;
+      if (lang === 'en') {
+        spoken = `Budget entry recorded. Your project capital has been updated to ${amtFormatted}. Under PMEGP, your 35 percent subsidy is ${subFormatted}, and estimated monthly EMI is ${emiFormatted}.`;
+        written = `✓ New Entry Recorded: Project Capital set to ${amtFormatted}.\n• 35% PMEGP Subsidy: ${subFormatted}\n• Estimated Bank Loan: ₹${loanAmt.toLocaleString('en-IN')}\n• Monthly EMI: ${emiFormatted} (5 years)`;
+      } else if (lang === 'mr') {
+        spoken = `नोंद यशस्वी झाली आहे. आपले प्रकल्प भांडवल ${amtFormatted} सेट केले गेले आहे. PMEGP योजनेतून ३५% सबसिडी ${subFormatted} मिळेल आणि मासिक हप्ता ${emiFormatted} असेल.`;
+        written = `✓ नवीन नोंद यशस्वी:\n• प्रकल्प भांडवल: ${amtFormatted}\n• PMEGP ३५% सबसिडी: ${subFormatted}\n• बँक कर्ज: ₹${loanAmt.toLocaleString('en-IN')}\n• मासिक हप्ता (EMI): ${emiFormatted}`;
+      } else if (lang === 'ta') {
+        spoken = `பதிவு செய்யப்பட்டது. உங்கள் திட்ட மூலதனம் ${amtFormatted} ஆக புதுப்பிக்கப்பட்டது. 35 சதவீத மானியமாக ${subFormatted} கிடைக்கும், மாதாந்திர தவணை ${emiFormatted} ஆகும்.`;
+        written = `✓ புதிய பதிவு சேர்க்கப்பட்டது:\n• திட்ட மூலதனம்: ${amtFormatted}\n• 35% PMEGP மானியம்: ${subFormatted}\n• வங்கி கடன்: ₹${loanAmt.toLocaleString('en-IN')}\n• மாத தவணை: ${emiFormatted}`;
+      } else if (lang === 'te') {
+        spoken = `ఎంట్రీ నమోదైంది. మీ ప్రాజెక్ట్ మూలధనం ${amtFormatted}గా నవీకరించబడింది. 35 శాతం సబ్సిడీగా ${subFormatted} అందుతాయి, నెలవారీ ఈఎంఐ ${emiFormatted} అవుతుంది.`;
+        written = `✓ కొత్త నమోదు విజయవంతమైంది:\n• ప్రాజెక్ట్ మూలధనం: ${amtFormatted}\n• PMEGP 35% రాయితీ: ${subFormatted}\n• బ్యాంక్ రుణం: ₹${loanAmt.toLocaleString('en-IN')}\n• నెలవారీ EMI: ${emiFormatted}`;
+      } else {
+        spoken = `प्रविष्टि दर्ज कर ली गई है। आपकी कुल प्रोजेक्ट पूंजी ${amtFormatted} सेट कर दी गई है। PMEGP के तहत 35% सब्सिडी ${subFormatted} मिलेगी, और मासिक EMI लगभग ${emiFormatted} बनेगी।`;
+        written = `✓ नई प्रविष्टि सफलतापूर्वक दर्ज:\n• प्रोजेक्ट पूंजी/बजट: ${amtFormatted}\n• PMEGP 35% सरकारी सब्सिडी: ${subFormatted}\n• अनुमानित बैंक ऋण: ₹${loanAmt.toLocaleString('en-IN')}\n• मासिक ईएमआई: ${emiFormatted}/माह`;
+      }
 
       return {
         understoodIntent: 'Update Project Budget / Capital',
         entryMade: true,
         entryType: 'budget_update',
-        entrySummary: isEn ? `Budget updated to ${amtFormatted}` : `बजट ${amtFormatted} में अपडेट किया गया`,
+        entrySummary: `Budget: ${amtFormatted}`,
         updatedProfile: updated,
         spokenReply: spoken,
         writtenReply: written,

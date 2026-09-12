@@ -1,10 +1,11 @@
-from typing import List, Optional
+from typing import List, Optional, Dict, Any
 from pydantic import BaseModel
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 from app.db.session import get_db
 from app.engines.recommendation import score_opportunities, BUSINESS_CATALOGUE
 from app.engines.gis_engine import get_gis_facility_analysis
+from app.engines.discovery_engine import analyze_business_discovery
 
 router = APIRouter(prefix="/discovery", tags=["Module 1: Business Discovery"])
 
@@ -13,6 +14,32 @@ class DiscoveryRequest(BaseModel):
     skills: List[str] = ["Dairy Farming", "Agriculture"]
     space_sqft: int = 500
     village_id: Optional[str] = "vil_bhiti"
+
+class AnalyzePayload(BaseModel):
+    user_profile: Optional[Dict[str, Any]] = None
+    business_profile: Optional[Dict[str, Any]] = None
+    location: Optional[Dict[str, Any]] = None
+    capital: Optional[float] = 70000.0
+
+@router.post("/analyze")
+def analyze_discovery(payload: AnalyzePayload):
+    """
+    POST /discovery/analyze
+    Returns structured business-aware discovery intelligence JSON:
+    - Opportunity Score & Fit
+    - 'Why this business can work here' (Demand, Competition, Supply, Access)
+    - Business Market Gap & Meaning
+    - Potential Customer Base (Primary & Expansion Catchments)
+    - Local Pricing Intelligence with Source/Confidence
+    - Business-Specific Risks & Mitigations
+    - Strategic AI Recommendation Card
+    - GIS Layers & Catchment Analytics
+    - Directional Market Gap Analysis
+    - Nearby Business & Competitor Comparison Matrix
+    - Immediate Actionable Next Steps
+    """
+    data = payload.dict()
+    return analyze_business_discovery(data)
 
 @router.post("/opportunities")
 def discover_opportunities(req: DiscoveryRequest, db: Session = Depends(get_db)):

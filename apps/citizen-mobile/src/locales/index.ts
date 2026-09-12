@@ -73,6 +73,80 @@ export interface Translations {
   collateralFree: string;
   applyScheme: string;
 
+  // Schemes Hub — Sub-tabs
+  schTabRecommended: string;
+  schTabEligibility: string;
+  schTabDocuments: string;
+  schTabCompare: string;
+  schTabTracking: string;
+
+  // Schemes Hub — Best Scheme Card
+  schBestTag: string;
+  schBestReason: string;
+  schMatchScore: string;
+  schAdvantages: string;
+  schSetActive: string;
+  schApplyNow: string;
+  schOtherSchemes: string;
+  schSwitchToFinance: string;
+  schCurrentlyActive: string;
+
+  // Schemes Hub — Eligibility
+  schEligibilityFor: string;
+  schEligibilitySummary: string;
+  schEligibilityPassed: string;
+  schEligibilityWarning: string;
+  schEligibilityFailed: string;
+  schStatutoryNote: string;
+  schOverallMatch: string;
+
+  // Schemes Hub — Documents
+  schDocumentsFor: string;
+  schDocReadiness: string;
+  schDocVerified: string;
+  schDocGenerated: string;
+  schDocUploaded: string;
+  schDocPending: string;
+  schDocMandatory: string;
+  schDocOptional: string;
+
+  // Schemes Hub — Compare
+  schCompareTitle: string;
+  schCompareFilter: string;
+  schCompareFilterAll: string;
+  schCompareFilterFinancial: string;
+  schCompareFilterTerms: string;
+  schCompareSelectSchemes: string;
+
+  // Schemes Hub — Tracking / Pipeline
+  schTrackingTitle: string;
+  schTrackingAppId: string;
+  schTrackingDate: string;
+  schTrackingChannel: string;
+  schTrackingStatus: string;
+  schNoApplications: string;
+
+  // Application Modal
+  schModalTitle: string;
+  schModalChannelOnline: string;
+  schModalChannelVDO: string;
+  schModalChannelDossier: string;
+  schModalSubmit: string;
+  schModalSubmitSuccess: string;
+
+  // Scheme parameters
+  schParamSubsidy: string;
+  schParamMaxLoan: string;
+  schParamInterest: string;
+  schParamTenure: string;
+  schParamMoratorium: string;
+  schParamMargin: string;
+  schParamCollateral: string;
+  schParamComplexity: string;
+  schParamProcessingTime: string;
+  schParamBestFor: string;
+  schParamMinistry: string;
+
   // Checklist
   checklistTitle: string;
   checklistSubtitle: string;
@@ -180,6 +254,72 @@ export const translations: Record<Language, Translations> = {
     collateralFree: "बिना गारंटी ऋण",
     applyScheme: "आवेदन प्रारंभ करें",
 
+    schTabRecommended: "सर्वश्रेष्ठ योजनाएं",
+    schTabEligibility: "पात्रता जांच",
+    schTabDocuments: "दस्तावेज़",
+    schTabCompare: "तुलना",
+    schTabTracking: "आवेदन स्थिति",
+
+    schBestTag: "⭐ आपके लिए सर्वश्रेष्ठ",
+    schBestReason: "क्यों अनुशंसित है",
+    schMatchScore: "मैच स्कोर",
+    schAdvantages: "मुख्य लाभ",
+    schSetActive: "इस योजना को चुनें",
+    schApplyNow: "अभी आवेदन करें",
+    schOtherSchemes: "अन्य उपलब्ध योजनाएं",
+    schSwitchToFinance: "वित्त कैलकुलेटर में देखें →",
+    schCurrentlyActive: "✓ वर्तमान में चयनित",
+
+    schEligibilityFor: "पात्रता जांच",
+    schEligibilitySummary: "आपकी प्रोफाइल के आधार पर पात्रता",
+    schEligibilityPassed: "पात्र",
+    schEligibilityWarning: "सावधान",
+    schEligibilityFailed: "अपात्र",
+    schStatutoryNote: "वैधानिक नोट",
+    schOverallMatch: "कुल पात्रता स्कोर",
+
+    schDocumentsFor: "आवश्यक दस्तावेज़",
+    schDocReadiness: "दस्तावेज़ तैयारी",
+    schDocVerified: "सत्यापित",
+    schDocGenerated: "जनरेट किया गया",
+    schDocUploaded: "अपलोड किया गया",
+    schDocPending: "लंबित",
+    schDocMandatory: "अनिवार्य",
+    schDocOptional: "वैकल्पिक",
+
+    schCompareTitle: "योजनाओं की तुलना",
+    schCompareFilter: "फ़िल्टर",
+    schCompareFilterAll: "सभी पैरामीटर",
+    schCompareFilterFinancial: "वित्तीय विवरण",
+    schCompareFilterTerms: "ऋण शर्तें",
+    schCompareSelectSchemes: "तुलना के लिए योजनाएं चुनें",
+
+    schTrackingTitle: "आवेदन ट्रैकर",
+    schTrackingAppId: "आवेदन ID",
+    schTrackingDate: "तारीख",
+    schTrackingChannel: "चैनल",
+    schTrackingStatus: "स्थिति",
+    schNoApplications: "अभी तक कोई आवेदन नहीं हुआ।",
+
+    schModalTitle: "आवेदन पैक चुनें",
+    schModalChannelOnline: "ऑनलाइन पोर्टल (KVIC/MSME)",
+    schModalChannelVDO: "VDO / पंचायत सहायता",
+    schModalChannelDossier: "बैंक डोज़ियर (DPR सहित)",
+    schModalSubmit: "आवेदन जमा करें",
+    schModalSubmitSuccess: "✓ आवेदन सफलतापूर्वक जमा हो गया!",
+
+    schParamSubsidy: "सब्सिडी दर",
+    schParamMaxLoan: "अधिकतम ऋण",
+    schParamInterest: "ब्याज दर",
+    schParamTenure: "ऋण अवधि",
+    schParamMoratorium: "मोरेटोरियम",
+    schParamMargin: "मार्जिन आवश्यकता",
+    schParamCollateral: "संपार्श्विक",
+    schParamComplexity: "जटिलता",
+    schParamProcessingTime: "प्रसंस्करण समय",
+    schParamBestFor: "किसके लिए सर्वोत्तम",
+    schParamMinistry: "मंत्रालय / नोडल एजेंसी",
+
     checklistTitle: "उद्यम स्थापना चेकलिस्ट",
     checklistSubtitle: "बिजनेस लॉन्च करने के 5 महत्वपूर्ण चरण",
     completedSteps: "चरण पूर्ण",
@@ -281,7 +421,74 @@ export const translations: Record<Language, Translations> = {
     collateralFree: "Collateral-Free",
     applyScheme: "Start Application",
 
+    schTabRecommended: "Best Schemes",
+    schTabEligibility: "Eligibility Check",
+    schTabDocuments: "Documents",
+    schTabCompare: "Compare",
+    schTabTracking: "Application Status",
+
+    schBestTag: "⭐ Best for You",
+    schBestReason: "Why Recommended",
+    schMatchScore: "Match Score",
+    schAdvantages: "Key Benefits",
+    schSetActive: "Set as Active Scheme",
+    schApplyNow: "Apply Now",
+    schOtherSchemes: "Other Available Schemes",
+    schSwitchToFinance: "View in Finance Calculator →",
+    schCurrentlyActive: "✓ Currently Selected",
+
+    schEligibilityFor: "Eligibility Check for",
+    schEligibilitySummary: "Your profile-based eligibility assessment",
+    schEligibilityPassed: "Eligible",
+    schEligibilityWarning: "Caution",
+    schEligibilityFailed: "Not Eligible",
+    schStatutoryNote: "Statutory Note",
+    schOverallMatch: "Overall Eligibility Score",
+
+    schDocumentsFor: "Required Documents for",
+    schDocReadiness: "Document Readiness",
+    schDocVerified: "Verified",
+    schDocGenerated: "Generated",
+    schDocUploaded: "Uploaded",
+    schDocPending: "Pending",
+    schDocMandatory: "Mandatory",
+    schDocOptional: "Optional",
+
+    schCompareTitle: "Scheme Comparison Matrix",
+    schCompareFilter: "Filter",
+    schCompareFilterAll: "All Parameters",
+    schCompareFilterFinancial: "Financial Details",
+    schCompareFilterTerms: "Loan Terms",
+    schCompareSelectSchemes: "Select schemes to compare",
+
+    schTrackingTitle: "Application Tracker",
+    schTrackingAppId: "Application ID",
+    schTrackingDate: "Date",
+    schTrackingChannel: "Channel",
+    schTrackingStatus: "Status",
+    schNoApplications: "No applications submitted yet.",
+
+    schModalTitle: "Choose Application Pack",
+    schModalChannelOnline: "Online Portal (KVIC/MSME)",
+    schModalChannelVDO: "VDO / Panchayat Assisted",
+    schModalChannelDossier: "Bank Dossier (with DPR)",
+    schModalSubmit: "Submit Application",
+    schModalSubmitSuccess: "✓ Application submitted successfully!",
+
+    schParamSubsidy: "Subsidy Rate",
+    schParamMaxLoan: "Max Loan",
+    schParamInterest: "Interest Rate",
+    schParamTenure: "Loan Tenure",
+    schParamMoratorium: "Moratorium",
+    schParamMargin: "Margin Requirement",
+    schParamCollateral: "Collateral",
+    schParamComplexity: "Complexity",
+    schParamProcessingTime: "Processing Time",
+    schParamBestFor: "Best Suited For",
+    schParamMinistry: "Ministry / Nodal Agency",
+
     checklistTitle: "Enterprise Launch Countdown",
+
     checklistSubtitle: "5 statutory and operational steps to launch",
     completedSteps: "Steps Completed",
 
@@ -382,7 +589,74 @@ export const translations: Record<Language, Translations> = {
     collateralFree: "विनातारण कर्ज",
     applyScheme: "अर्ज करा",
 
+    schTabRecommended: "सर्वोत्तम योजना",
+    schTabEligibility: "पात्रता तपासणी",
+    schTabDocuments: "कागदपत्रे",
+    schTabCompare: "तुलना",
+    schTabTracking: "अर्ज स्थिती",
+
+    schBestTag: "⭐ आपल्यासाठी सर्वोत्तम",
+    schBestReason: "का शिफारस केली",
+    schMatchScore: "जुळणी गुण",
+    schAdvantages: "मुख्य फायदे",
+    schSetActive: "ही योजना निवडा",
+    schApplyNow: "आत्ताच अर्ज करा",
+    schOtherSchemes: "इतर उपलब्ध योजना",
+    schSwitchToFinance: "वित्त कॅल्क्युलेटरमध्ये पहा →",
+    schCurrentlyActive: "✓ सध्या निवडलेले",
+
+    schEligibilityFor: "पात्रता तपासणी",
+    schEligibilitySummary: "आपल्या प्रोफाइलवर आधारित पात्रता",
+    schEligibilityPassed: "पात्र",
+    schEligibilityWarning: "सावधान",
+    schEligibilityFailed: "अपात्र",
+    schStatutoryNote: "वैधानिक नोंद",
+    schOverallMatch: "एकूण पात्रता गुण",
+
+    schDocumentsFor: "आवश्यक कागदपत्रे",
+    schDocReadiness: "कागदपत्र तयारी",
+    schDocVerified: "सत्यापित",
+    schDocGenerated: "तयार केले",
+    schDocUploaded: "अपलोड केले",
+    schDocPending: "प्रलंबित",
+    schDocMandatory: "अनिवार्य",
+    schDocOptional: "पर्यायी",
+
+    schCompareTitle: "योजना तुलना",
+    schCompareFilter: "फिल्टर",
+    schCompareFilterAll: "सर्व पॅरामीटर",
+    schCompareFilterFinancial: "आर्थिक तपशील",
+    schCompareFilterTerms: "कर्ज अटी",
+    schCompareSelectSchemes: "तुलनेसाठी योजना निवडा",
+
+    schTrackingTitle: "अर्ज ट्रॅकर",
+    schTrackingAppId: "अर्ज ID",
+    schTrackingDate: "तारीख",
+    schTrackingChannel: "चॅनेल",
+    schTrackingStatus: "स्थिती",
+    schNoApplications: "अद्याप कोणताही अर्ज सादर केला नाही.",
+
+    schModalTitle: "अर्ज पॅक निवडा",
+    schModalChannelOnline: "ऑनलाइन पोर्टल (KVIC/MSME)",
+    schModalChannelVDO: "VDO / पंचायत सहाय्य",
+    schModalChannelDossier: "बँक डोसियर (DPR सह)",
+    schModalSubmit: "अर्ज सादर करा",
+    schModalSubmitSuccess: "✓ अर्ज यशस्वीरीत्या सादर झाला!",
+
+    schParamSubsidy: "सबसिडी दर",
+    schParamMaxLoan: "कमाल कर्ज",
+    schParamInterest: "व्याजदर",
+    schParamTenure: "कर्ज मुदत",
+    schParamMoratorium: "मोरेटोरियम",
+    schParamMargin: "मार्जिन आवश्यकता",
+    schParamCollateral: "तारण",
+    schParamComplexity: "जटिलता",
+    schParamProcessingTime: "प्रक्रिया वेळ",
+    schParamBestFor: "कोणासाठी सर्वोत्तम",
+    schParamMinistry: "मंत्रालय / नोडल एजन्सी",
+
     checklistTitle: "सुरुवात चेकलिस्ट",
+
     checklistSubtitle: "व्यवसाय सुरू करण्याचे ५ टप्पे",
     completedSteps: "टप्पे पूर्ण",
 
@@ -483,7 +757,74 @@ export const translations: Record<Language, Translations> = {
     collateralFree: "பிணையில்லா கடன்",
     applyScheme: "விண்ணப்பிக்க",
 
+    schTabRecommended: "சிறந்த திட்டங்கள்",
+    schTabEligibility: "தகுதி சோதனை",
+    schTabDocuments: "ஆவணங்கள்",
+    schTabCompare: "ஒப்பீடு",
+    schTabTracking: "விண்ணப்ப நிலை",
+
+    schBestTag: "⭐ உங்களுக்கு சிறந்தது",
+    schBestReason: "ஏன் பரிந்துரைக்கப்பட்டது",
+    schMatchScore: "பொருத்த மதிப்பெண்",
+    schAdvantages: "முக்கிய நன்மைகள்",
+    schSetActive: "இந்த திட்டத்தை தேர்ந்தெடு",
+    schApplyNow: "இப்போதே விண்ணப்பிக்கவும்",
+    schOtherSchemes: "மற்ற கிடைக்கும் திட்டங்கள்",
+    schSwitchToFinance: "நிதி கணக்கியலில் பார்க்கவும் →",
+    schCurrentlyActive: "✓ தற்போது தேர்ந்தெடுக்கப்பட்டது",
+
+    schEligibilityFor: "தகுதி சோதனை",
+    schEligibilitySummary: "உங்கள் சுயவிவரத்தின் படி தகுதி",
+    schEligibilityPassed: "தகுதியுடையவர்",
+    schEligibilityWarning: "எச்சரிக்கை",
+    schEligibilityFailed: "தகுதியற்றவர்",
+    schStatutoryNote: "சட்டபூர்வ குறிப்பு",
+    schOverallMatch: "மொத்த தகுதி மதிப்பெண்",
+
+    schDocumentsFor: "தேவையான ஆவணங்கள்",
+    schDocReadiness: "ஆவண தயார்நிலை",
+    schDocVerified: "சரிபார்க்கப்பட்டது",
+    schDocGenerated: "உருவாக்கப்பட்டது",
+    schDocUploaded: "பதிவேற்றப்பட்டது",
+    schDocPending: "நிலுவையில்",
+    schDocMandatory: "கட்டாயம்",
+    schDocOptional: "விருப்பத்தேர்வு",
+
+    schCompareTitle: "திட்ட ஒப்பீட்டு அட்டவணை",
+    schCompareFilter: "வடிகட்டி",
+    schCompareFilterAll: "அனைத்து அளவுருக்கள்",
+    schCompareFilterFinancial: "நிதி விவரங்கள்",
+    schCompareFilterTerms: "கடன் நிபந்தனைகள்",
+    schCompareSelectSchemes: "ஒப்பிட திட்டங்களை தேர்ந்தெடுக்கவும்",
+
+    schTrackingTitle: "விண்ணப்ப நிலை கண்காணிப்பு",
+    schTrackingAppId: "விண்ணப்ப ID",
+    schTrackingDate: "தேதி",
+    schTrackingChannel: "சேனல்",
+    schTrackingStatus: "நிலை",
+    schNoApplications: "இன்னும் எந்த விண்ணப்பமும் சமர்ப்பிக்கப்படவில்லை.",
+
+    schModalTitle: "விண்ணப்ப தொகுப்பை தேர்வு செய்க",
+    schModalChannelOnline: "ஆன்லைன் போர்டல் (KVIC/MSME)",
+    schModalChannelVDO: "VDO / பஞ்சாயத்து உதவி",
+    schModalChannelDossier: "வங்கி டோசியர் (DPR உடன்)",
+    schModalSubmit: "விண்ணப்பத்தை சமர்ப்பிக்கவும்",
+    schModalSubmitSuccess: "✓ விண்ணப்பம் வெற்றிகரமாக சமர்ப்பிக்கப்பட்டது!",
+
+    schParamSubsidy: "மானிய விகிதம்",
+    schParamMaxLoan: "அதிகபட்ச கடன்",
+    schParamInterest: "வட்டி விகிதம்",
+    schParamTenure: "கடன் காலம்",
+    schParamMoratorium: "மொராட்டோரியம்",
+    schParamMargin: "மார்ஜின் தேவை",
+    schParamCollateral: "பிணை",
+    schParamComplexity: "சிக்கலான தன்மை",
+    schParamProcessingTime: "செயலாக்க நேரம்",
+    schParamBestFor: "யாருக்கு சிறந்தது",
+    schParamMinistry: "அமைச்சகம் / நோடல் ஏஜென்சி",
+
     checklistTitle: "தொழில் தொடக்க பட்டியல்",
+
     checklistSubtitle: "தொழில் தொடங்குவதற்கான 5 படிகள்",
     completedSteps: "படிகள் முடிந்தது",
 
@@ -584,7 +925,74 @@ export const translations: Record<Language, Translations> = {
     collateralFree: "హామీ లేని రుణం",
     applyScheme: "దరఖాస్తు చేయండి",
 
+    schTabRecommended: "ఉత్తమ పథకాలు",
+    schTabEligibility: "అర్హత తనిఖీ",
+    schTabDocuments: "పత్రాలు",
+    schTabCompare: "పోలిక",
+    schTabTracking: "దరఖాస్తు స్థితి",
+
+    schBestTag: "⭐ మీకు అత్యుత్తమం",
+    schBestReason: "ఎందుకు సిఫార్సు చేయబడింది",
+    schMatchScore: "సరిపోలిక స్కోర్",
+    schAdvantages: "ముఖ్య ప్రయోజనాలు",
+    schSetActive: "ఈ పథకాన్ని ఎంచుకోండి",
+    schApplyNow: "ఇప్పుడే దరఖాస్తు చేయండి",
+    schOtherSchemes: "ఇతర అందుబాటులో ఉన్న పథకాలు",
+    schSwitchToFinance: "ఆర్థిక కాలిక్యులేటర్‌లో చూడండి →",
+    schCurrentlyActive: "✓ ప్రస్తుతం ఎంచుకోబడింది",
+
+    schEligibilityFor: "అర్హత తనిఖీ",
+    schEligibilitySummary: "మీ ప్రొఫైల్ ఆధారంగా అర్హత",
+    schEligibilityPassed: "అర్హులు",
+    schEligibilityWarning: "జాగ్రత్త",
+    schEligibilityFailed: "అనర్హులు",
+    schStatutoryNote: "శాసనబద్ధ గమనిక",
+    schOverallMatch: "మొత్తం అర్హత స్కోర్",
+
+    schDocumentsFor: "అవసరమైన పత్రాలు",
+    schDocReadiness: "పత్రాల సంసిద్ధత",
+    schDocVerified: "ధృవీకరించబడింది",
+    schDocGenerated: "రూపొందించబడింది",
+    schDocUploaded: "అప్‌లోడ్ చేయబడింది",
+    schDocPending: "పెండింగ్",
+    schDocMandatory: "తప్పనిసరి",
+    schDocOptional: "ఐచ్ఛికం",
+
+    schCompareTitle: "పథక పోలిక పట్టిక",
+    schCompareFilter: "ఫిల్టర్",
+    schCompareFilterAll: "అన్ని పారామీటర్లు",
+    schCompareFilterFinancial: "ఆర్థిక వివరాలు",
+    schCompareFilterTerms: "రుణ నిబంధనలు",
+    schCompareSelectSchemes: "పోల్చడానికి పథకాలు ఎంచుకోండి",
+
+    schTrackingTitle: "దరఖాస్తు ట్రాకర్",
+    schTrackingAppId: "దరఖాస్తు ID",
+    schTrackingDate: "తేదీ",
+    schTrackingChannel: "చానల్",
+    schTrackingStatus: "స్థితి",
+    schNoApplications: "ఇంకా ఏ దరఖాస్తూ సమర్పించబడలేదు.",
+
+    schModalTitle: "దరఖాస్తు ప్యాక్ ఎంచుకోండి",
+    schModalChannelOnline: "ఆన్‌లైన్ పోర్టల్ (KVIC/MSME)",
+    schModalChannelVDO: "VDO / పంచాయతీ సహాయం",
+    schModalChannelDossier: "బ్యాంకు డోజియర్ (DPR తో)",
+    schModalSubmit: "దరఖాస్తు సమర్పించండి",
+    schModalSubmitSuccess: "✓ దరఖాస్తు విజయవంతంగా సమర్పించబడింది!",
+
+    schParamSubsidy: "సబ్సిడీ రేటు",
+    schParamMaxLoan: "గరిష్ట రుణం",
+    schParamInterest: "వడ్డీ రేటు",
+    schParamTenure: "రుణ కాలపరిమితి",
+    schParamMoratorium: "మారటోరియం",
+    schParamMargin: "మార్జిన్ అవసరం",
+    schParamCollateral: "హామీ",
+    schParamComplexity: "సంక్లిష్టత",
+    schParamProcessingTime: "ప్రాసెసింగ్ సమయం",
+    schParamBestFor: "ఎవరికి అనువైనది",
+    schParamMinistry: "మంత్రిత్వ శాఖ / నోడల్ ఏజెన్సీ",
+
     checklistTitle: "వ్యాపార స్థాపన చెక్‌లిస్ట్",
+
     checklistSubtitle: "వ్యాపారం ప్రారంభించడానికి 5 ముఖ్యమైన దశలు",
     completedSteps: "దశలు పూర్తయ్యాయి",
 

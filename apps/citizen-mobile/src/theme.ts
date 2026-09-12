@@ -61,6 +61,7 @@ export const SPACING = {
 
 export const FONT = {
   regular: 'System',
+  medium: 'System',
   bold: 'System',
   xs: 10,
   sm: 12,

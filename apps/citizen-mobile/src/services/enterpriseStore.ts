@@ -7,6 +7,9 @@
 export interface BeneficiaryProfile {
   fullName: string;
   phone: string;
+  email?: string;
+  gender?: string;
+  age?: number;
   socialCategory: string;
   capital: number;
   skills: string[];
@@ -20,6 +23,28 @@ export interface BeneficiaryProfile {
   villageName: string;
   selectedBizId: string;
   selectedBizName: string;
+  businessIdeaDescription?: string;
+  competitionAnalysis?: {
+    competitionLevel: 'Low' | 'Moderate' | 'High';
+    existingCompetitorsCount: number;
+    feasibilityScore: number;
+    marketDemandScore: number;
+    recommendation: 'Proceed' | 'Alternative Recommended';
+    recommendationNote?: string;
+    recommendedAlternatives?: Array<{
+      id: string;
+      name: string;
+      category: string;
+      expectedROI: string;
+      subsidyScheme: string;
+      demandLevel: string;
+    }>;
+  };
+  gpsLocation?: {
+    lat: number;
+    lng: number;
+    addressString?: string;
+  };
   businessStatus: 'Planning' | 'Applied' | 'Operational' | 'Expanding';
 }
 
@@ -122,7 +147,8 @@ const STORAGE_KEYS = {
   OFFICER_PROOF: 'gramudyam_officer_proof_doc',
   ACTIVE_ROLE: 'gramudyam_active_role', // 'entrepreneur' | 'field_officer'
   REGISTERED_ENTREPRENEURS: 'gramudyam_registered_entrepreneurs',
-  ACTIVE_ENTREPRENEUR_SESSION: 'gramudyam_active_entrepreneur_session'
+  ACTIVE_ENTREPRENEUR_SESSION: 'gramudyam_active_entrepreneur_session',
+  ACTIVE_SCHEME: 'gramudyam_active_selected_scheme'
 };
 
 export interface RegisteredEntrepreneur {
@@ -545,6 +571,14 @@ export function clearActiveEntrepreneurSession(): void {
   } catch (e) {}
 }
 
+export function getActiveScheme(defaultScheme = 'pmegp'): string {
+  return getStored<string>(STORAGE_KEYS.ACTIVE_SCHEME, defaultScheme);
+}
+
+export function saveActiveScheme(schemeId: string): void {
+  setStored(STORAGE_KEYS.ACTIVE_SCHEME, schemeId);
+}
+
 // -------------------------------------------------------------
 // VILLAGE BUSINESS DIRECTORY APIS
 // -------------------------------------------------------------
@@ -747,5 +781,56 @@ export function getOfficerProofDoc(): UploadedProofDoc {
 
 export function saveOfficerProofDoc(proof: UploadedProofDoc): void {
   setStored(STORAGE_KEYS.OFFICER_PROOF, proof);
+}
+
+/**
+ * Auto-detect the preferred language from a beneficiary's registered state.
+ * Falls back to 'hi' (Hindi) if no match or state unknown.
+ * Mapping is based on primary/official state language.
+ */
+export type DetectableLanguage = 'hi' | 'en' | 'mr' | 'ta' | 'te';
+export function detectLanguageFromProfile(profile: BeneficiaryProfile | null): DetectableLanguage {
+  if (!profile) return 'hi';
+
+  // 1. Check explicit stateCode
+  const state = (profile.stateCode || '').toUpperCase().trim();
+  if (state === 'TN') return 'ta';
+  if (state === 'MH' || state === 'GA') return 'mr';
+  if (state === 'AP' || state === 'TS') return 'te';
+
+  // 2. Check full text of village, district, and state combined
+  const combined = `${profile.stateCode || ''} ${profile.districtName || ''} ${profile.villageName || ''}`.toLowerCase();
+
+  // Tamil Nadu indicators
+  if (
+    combined.includes('tamil') || combined.includes('chennai') || combined.includes('madurai') ||
+    combined.includes('coimbatore') || combined.includes('salem') || combined.includes('tiruchirappalli') ||
+    combined.includes('thanjavur') || combined.includes('tirunelveli') || combined.includes('vellore')
+  ) {
+    return 'ta';
+  }
+
+  // Maharashtra indicators
+  if (
+    combined.includes('maharashtra') || combined.includes('pune') || combined.includes('mumbai') ||
+    combined.includes('nashik') || combined.includes('nagpur') || combined.includes('kolhapur') ||
+    combined.includes('aurangabad') || combined.includes('satara') || combined.includes('solapur') ||
+    combined.includes('amravati') || combined.includes('thane') || combined.includes('baramati')
+  ) {
+    return 'mr';
+  }
+
+  // Andhra Pradesh & Telangana indicators
+  if (
+    combined.includes('andhra') || combined.includes('telangana') || combined.includes('hyderabad') ||
+    combined.includes('vijayawada') || combined.includes('visakhapatnam') || combined.includes('guntur') ||
+    combined.includes('warangal') || combined.includes('tirupati') || combined.includes('kurnool') ||
+    combined.includes('rajahmundry') || combined.includes('nellore')
+  ) {
+    return 'te';
+  }
+
+  // Default to Hindi for northern/central states (UP, MP, Bihar, Rajasthan, Haryana, Delhi, etc.)
+  return 'hi';
 }
 
