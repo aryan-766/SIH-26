@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from app.db.session import get_db
-from app.db.models import BusinessApplication, District, Village, LocalFacility, User
+from app.db.models import BusinessApplication, District, Village, LocalFacility, User, Scheme
 from app.core.security import get_current_user, require_role, scope_filter
 from app.engines.officer_assistant import process_officer_nl_query
 
@@ -279,6 +279,27 @@ def get_scheme_stats(
     total_beneficiaries = sum(s["beneficiaries_count"] for s in schemes)
     total_pending = sum(s["pending_approval"] for s in schemes)
 
+    # Fetch live synced schemes from DB
+    db_schemes = db.query(Scheme).all()
+    all_schemes_list = [
+        {
+            "id": s.id,
+            "name": s.name,
+            "name_hi": s.name_hi,
+            "ministry": s.ministry,
+            "max_loan_amount": s.max_loan_amount,
+            "subsidy_percent_rural": s.subsidy_percent_rural,
+            "special_category_subsidy_percent": s.special_category_subsidy_percent,
+            "collateral_free": s.collateral_free,
+            "portal_url": s.portal_url or (f"https://www.myscheme.gov.in/schemes/{s.slug}" if s.slug else "https://www.india.gov.in/my-government/schemes"),
+            "tags": s.tags or [],
+            "source": s.source or "National Portal of India (india.gov.in)",
+            "description": s.description,
+            "last_synced": s.last_synced.isoformat() if s.last_synced else None
+        }
+        for s in db_schemes
+    ]
+
     return {
         "district_id": district_id,
         "summary": {
@@ -286,8 +307,22 @@ def get_scheme_stats(
             "total_disbursed_cr": round(total_disbursed, 1),
             "utilization_rate_pct": round((total_disbursed / total_allocated) * 100, 1),
             "total_beneficiaries": total_beneficiaries,
-            "total_pending_approval": total_pending
+            "total_pending_approval": total_pending,
+            "total_schemes_in_db": len(db_schemes),
+            "data_source": "National Portal of India (india.gov.in)"
         },
-        "schemes": schemes
+        "schemes": schemes,
+        "all_rural_schemes": all_schemes_list
     }
+
+@router.post("/schemes/sync-live")
+def officer_sync_schemes(
+    max_pages: int = Query(5, ge=1, le=10),
+    db: Session = Depends(get_db)
+):
+    """
+    Officer-triggered live synchronization from National Portal of India (india.gov.in)
+    """
+    from app.engines.scheme_sync import sync_schemes_from_india_gov
+    return sync_schemes_from_india_gov(db, max_pages=max_pages)
 

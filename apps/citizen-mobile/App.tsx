@@ -181,7 +181,15 @@ function MainAppContent() {
                 name="Finance"
                 options={{ tabBarLabel: translations[lang]?.navFinances || 'वित्त व DPR' }}
               >
-                {() => <FinanceScreen userProfile={userProfile} lang={lang} />}
+                {({ navigation }: any) => (
+                  <FinanceScreen 
+                    userProfile={userProfile} 
+                    lang={lang} 
+                    onNavigateToSchemes={(schemeId?: string) => {
+                      navigation.navigate('Schemes', { initialSchemeId: schemeId });
+                    }}
+                  />
+                )}
               </Tab.Screen>
 
               <Tab.Screen
@@ -199,10 +207,11 @@ function MainAppContent() {
                   ),
                 }}
               >
-                {({ navigation }: any) => (
+                {({ navigation, route }: any) => (
                   <SchemesScreen
                     userProfile={userProfile}
                     lang={lang}
+                    initialSchemeId={route?.params?.initialSchemeId}
                     onNavigateToFinance={() => navigation.navigate('Finance')}
                   />
                 )}

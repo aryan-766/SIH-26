@@ -4,7 +4,7 @@ import {
   AlertCircle, Sparkles, TrendingUp, DollarSign, Wallet, Landmark, 
   ChevronRight, ChevronDown, Check, Clock, Layers, Star, Info,
   AlertTriangle, Upload, Eye, Share2, Printer, Sliders, BarChart3,
-  Building, RefreshCw, FileCheck, Plus, Trash2, Edit3
+  Building, RefreshCw, FileCheck, Plus, Trash2, Edit3, ArrowRight
 } from 'lucide-react';
 import { 
   calculateProjectCostStructure,
@@ -547,6 +547,60 @@ export const FinanceDprHub: React.FC<FinanceDprHubProps> = ({
                 <span className="font-black text-xl">₹{waterfall.netCashSurplus.toLocaleString()}</span>
               </div>
             </div>
+
+            {/* Direct Scheme Proceed Quick-Action Card in Overview */}
+            <div className="p-3.5 rounded-2xl bg-gradient-to-br from-emerald-50 via-teal-50/50 to-white border-2 border-emerald-500 shadow-xs space-y-2.5">
+              <div className="flex items-center justify-between">
+                <div>
+                  <span className="text-[9px] font-black uppercase px-2 py-0.5 rounded-md bg-emerald-600 text-white inline-block">
+                    ★ {isEn ? 'Top Recommended Government Scheme' : 'शीर्ष अनुशंसित सरकारी योजना'}
+                  </span>
+                  <h4 className="font-black text-xs text-slate-900 mt-1">
+                    {isEn ? "PMEGP (Rural 35% Capital Subsidy)" : "प्रधानमंत्री रोजगार सृजन कार्यक्रम (35% सब्सिडी)"}
+                  </h4>
+                </div>
+                <div className="text-right">
+                  <span className="text-xs font-black text-emerald-800">
+                    ₹{Math.round(activeProjectCost * 0.35).toLocaleString()} {isEn ? 'Grant' : 'अनुदान'}
+                  </span>
+                  <span className="text-[10px] text-slate-500 block">35% Rural Subsidy</span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-3 gap-1.5 text-center text-[10px] bg-white p-2 rounded-xl border border-emerald-200">
+                <div>
+                  <span className="text-slate-500 block">{isEn ? 'Margin' : 'स्वयं पूंजी'}:</span>
+                  <b className="text-amber-800">₹{Math.round(activeProjectCost * 0.05).toLocaleString()} (5%)</b>
+                </div>
+                <div>
+                  <span className="text-slate-500 block">{isEn ? 'Net Loan' : 'बैंक ऋण'}:</span>
+                  <b className="text-purple-800">₹{Math.round(activeProjectCost * 0.60).toLocaleString()}</b>
+                </div>
+                <div>
+                  <span className="text-slate-500 block">{isEn ? 'Monthly EMI' : 'मासिक EMI'}:</span>
+                  <b className="text-slate-900">₹{monthlyEmi.toLocaleString()}</b>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2 pt-0.5">
+                <button
+                  type="button"
+                  onClick={() => onSelectSchemeNavigate && onSelectSchemeNavigate('scheme_pmegp')}
+                  className="py-2 px-3 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-black rounded-xl transition flex items-center justify-center gap-1.5 shadow-xs"
+                >
+                  <span>{isEn ? 'Proceed with PMEGP →' : 'PMEGP योजना के साथ आगे बढ़ें →'}</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setActiveSubTab('schemes')}
+                  className="py-2 px-3 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 text-xs font-bold rounded-xl transition flex items-center justify-center gap-1.5 shadow-xs"
+                >
+                  <Landmark className="w-3.5 h-3.5 text-rural-600" />
+                  <span>{isEn ? 'Compare All Schemes' : 'सभी योजनाएं देखें'}</span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}
@@ -982,89 +1036,304 @@ export const FinanceDprHub: React.FC<FinanceDprHubProps> = ({
       )}
 
       {/* ============================================================= */}
-      {/* SUB-TAB 7: SCHEME COMPARISON                                   */}
+      {/* SUB-TAB 7: SCHEME COMPARISON (DYNAMIC FINANCIAL APPRAISAL)      */}
       {/* ============================================================= */}
-      {activeSubTab === 'schemes' && (
-        <div className="space-y-3">
-          <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs space-y-3.5">
-            <div>
-              <h3 className="text-xs font-black uppercase tracking-wider text-slate-900">
-                {isEn ? 'Credit & Subsidy Scheme Comparison' : 'सरकारी ऋण एवं सब्सिडी योजना तुलना'}
-              </h3>
-              <p className="text-[10px] text-slate-500">Automated scheme suitability score based on your profile</p>
-            </div>
+      {activeSubTab === 'schemes' && (() => {
+        const isSpecialCategory = ['OBC', 'SC', 'ST', 'Women'].includes(userProfile.socialCategory || 'OBC');
 
-            {/* Scheme 1: PMEGP (BEST MATCH) */}
-            <div className="p-3.5 rounded-xl border-2 border-emerald-500 bg-emerald-50/50 space-y-2">
+        // Dynamic hisaab calculations per scheme
+        const pmegpSubsidyRate = isSpecialCategory ? 0.35 : 0.25;
+        const pmegpSubsidyAmt = Math.min(1750000, Math.round(activeProjectCost * pmegpSubsidyRate));
+        const pmegpMarginPct = isSpecialCategory ? 5 : 10;
+        const pmegpMarginAmt = Math.round(activeProjectCost * (pmegpMarginPct / 100));
+        const pmegpLoan = Math.max(0, activeProjectCost - pmegpSubsidyAmt - pmegpMarginAmt);
+        const pmegpEmi = calculateDeterministicEmi(pmegpLoan, 9.0, 7, 6);
+
+        const pmfmeSubsidyRate = 0.35;
+        const pmfmeSubsidyAmt = Math.min(1000000, Math.round(activeProjectCost * pmfmeSubsidyRate));
+        const pmfmeMarginPct = 10;
+        const pmfmeMarginAmt = Math.round(activeProjectCost * 0.10);
+        const pmfmeLoan = Math.max(0, activeProjectCost - pmfmeSubsidyAmt - pmfmeMarginAmt);
+        const pmfmeEmi = calculateDeterministicEmi(pmfmeLoan, 8.5, 5, 3);
+
+        const mudraSubsidyAmt = 0;
+        const mudraMarginPct = 5;
+        const mudraMarginAmt = Math.round(activeProjectCost * 0.05);
+        const mudraLoan = Math.max(0, activeProjectCost - mudraMarginAmt);
+        const mudraEmi = calculateDeterministicEmi(mudraLoan, 9.5, 5, 0);
+
+        const standupMarginPct = 15;
+        const standupMarginAmt = Math.round(activeProjectCost * 0.15);
+        const standupLoan = Math.max(0, activeProjectCost - standupMarginAmt);
+        const standupEmi = calculateDeterministicEmi(standupLoan, 8.0, 7, 12);
+
+        const ahidfMarginPct = 10;
+        const ahidfMarginAmt = Math.round(activeProjectCost * 0.10);
+        const ahidfLoan = Math.max(0, activeProjectCost - ahidfMarginAmt);
+        const ahidfEmi = calculateDeterministicEmi(ahidfLoan, 6.5, 8, 24);
+
+        const vishwakarmaLoan = Math.min(activeProjectCost, 300000);
+        const vishwakarmaEmi = calculateDeterministicEmi(vishwakarmaLoan, 5.0, 3, 0);
+
+        const schemeCards = [
+          {
+            id: 'scheme_pmegp',
+            code: 'PMEGP',
+            name: isEn ? "Prime Minister's Employment Generation Programme (PMEGP)" : "प्रधानमंत्री रोजगार सृजन कार्यक्रम (PMEGP)",
+            ministry: isEn ? "Ministry of MSME & KVIC" : "सूक्ष्म, लघु व मध्यम उद्यम मंत्रालय (MSME)",
+            badge: isEn ? "★ BEST MATCH (35% RURAL GRANT)" : "★ सर्वश्रेष्ठ मेल (35% ग्रामीण अनुदान)",
+            badgeColor: "bg-emerald-600 text-white",
+            borderColor: "border-emerald-500 bg-emerald-50/40 ring-1 ring-emerald-500/20",
+            suitability: 96,
+            subsidyPct: `${(pmegpSubsidyRate * 100).toFixed(0)}%`,
+            subsidyAmt: pmegpSubsidyAmt,
+            marginPct: pmegpMarginPct,
+            marginAmt: pmegpMarginAmt,
+            loanAmt: pmegpLoan,
+            emiAmt: pmegpEmi,
+            interest: "9.0% p.a.",
+            tenure: "7 Years",
+            moratorium: "6 Months",
+            collateral: isEn ? "100% Collateral-Free (CGTMSE Guarantee)" : "बिना गारंटी (CGTMSE गारंटी कवर)",
+            advantage: isEn 
+              ? "Highest upfront capital subsidy credited directly into bank account with minimal 5% own margin requirement."
+              : "सर्वोच्च 35% पूंजीगत सब्सिडी सीधे बैंक खाते में जमा, केवल 5% न्यूनतम स्वयं मार्जिन पूंजी आवश्यक।"
+          },
+          {
+            id: 'scheme_pmfme',
+            code: 'PMFME',
+            name: isEn ? "PM Formalisation of Micro Food Processing Enterprises (PMFME)" : "प्रधानमंत्री सूक्ष्म खाद्य उद्योग उन्नयन योजना (PMFME)",
+            ministry: isEn ? "Ministry of Food Processing Industries (MoFPI)" : "खाद्य प्रसंस्करण उद्योग मंत्रालय (MoFPI)",
+            badge: isEn ? "35% CREDIT-LINKED GRANT (UP TO ₹10L)" : "35% क्रेडिट-लिंक्ड अनुदान (₹10 लाख तक)",
+            badgeColor: "bg-purple-600 text-white",
+            borderColor: "border-purple-300 bg-purple-50/30",
+            suitability: 92,
+            subsidyPct: "35%",
+            subsidyAmt: pmfmeSubsidyAmt,
+            marginPct: pmfmeMarginPct,
+            marginAmt: pmfmeMarginAmt,
+            loanAmt: pmfmeLoan,
+            emiAmt: pmfmeEmi,
+            interest: "8.5% p.a.",
+            tenure: "5 Years",
+            moratorium: "3 Months",
+            collateral: isEn ? "Collateral-Free up to ₹10 Lakh" : "₹10 लाख तक बिना गारंटी (Collateral-Free)",
+            advantage: isEn
+              ? "35% capital subsidy for food processing, flour/oil mills, dairy, spice units + free DRP technical handholding."
+              : "खाद्य, मसाला, आटा/तेल मिल, डेयरी इकाइयों हेतु 35% अनुदान + जिला संसाधन व्यक्ति (DRP) द्वारा निःशुल्क सहयोग।"
+          },
+          {
+            id: 'scheme_mudra',
+            code: 'PM MUDRA',
+            name: isEn ? "Pradhan Mantri MUDRA Yojana (Tarun / Tarun Plus)" : "प्रधानमंत्री मुद्रा योजना (किशोर / तरुण ऋण)",
+            ministry: isEn ? "Ministry of Finance / SIDBI" : "वित्त मंत्रालय / सिडबी (SIDBI)",
+            badge: isEn ? "INSTANT SANCTION • ZERO SUBSIDY DELAY" : "त्वरित स्वीकृति • बिना सब्सिडी प्रतीक्षा",
+            badgeColor: "bg-blue-600 text-white",
+            borderColor: "border-blue-300 bg-blue-50/30",
+            suitability: 88,
+            subsidyPct: "0%",
+            subsidyAmt: mudraSubsidyAmt,
+            marginPct: mudraMarginPct,
+            marginAmt: mudraMarginAmt,
+            loanAmt: mudraLoan,
+            emiAmt: mudraEmi,
+            interest: "9.5% p.a.",
+            tenure: "5 Years",
+            moratorium: "0 Months",
+            collateral: isEn ? "100% Collateral-Free (CGFMU Scheme)" : "पूर्णतः तारणमुक्त (CGFMU केंद्र सरकार गारंटी)",
+            advantage: isEn
+              ? "Fastest sanction within 7-10 days without waiting for subsidy sanction committee meetings."
+              : "सबसे तेज बैंक स्वीकृति 7-10 दिनों में, बिना किसी सब्सिडी कमेटी के चक्कर लगाए सीधे ऋण संवितरण।"
+          },
+          {
+            id: 'scheme_ahidf',
+            code: 'AHIDF',
+            name: isEn ? "Animal Husbandry Infrastructure Development Fund (AHIDF)" : "पशुपालन अवसंरचना विकास निधि (AHIDF)",
+            ministry: isEn ? "Dept of Animal Husbandry & Dairying (DAHD)" : "पशुपालन व डेयरी विभाग (DAHD)",
+            badge: isEn ? "3% INTEREST SUBVENTION • 2-YR MORATORIUM" : "3% ब्याज छूट • 2 वर्ष मोरेटोरियम",
+            badgeColor: "bg-teal-600 text-white",
+            borderColor: "border-teal-300 bg-teal-50/30",
+            suitability: 89,
+            subsidyPct: "3% Subvention",
+            subsidyAmt: Math.round(ahidfLoan * 0.03 * 3),
+            marginPct: ahidfMarginPct,
+            marginAmt: ahidfMarginAmt,
+            loanAmt: ahidfLoan,
+            emiAmt: ahidfEmi,
+            interest: "6.5% p.a. (Post-Subvention)",
+            tenure: "8 Years",
+            moratorium: "24 Months",
+            collateral: isEn ? "NABARD Credit Guarantee Cover (25%)" : "नाबार्ड क्रेडिट गारंटी फंड ट्रस्ट",
+            advantage: isEn
+              ? "Ideal for dairy chilling, cattle feed plants, meat/milk processing with 2 years principal payment holiday."
+              : "डेयरी चिलिंग सेंटर, पशु आहार एवं दुग्ध मूल्य संवर्धन हेतु आदर्श; 2 वर्ष तक मूलधन वापसी से छूट।"
+          },
+          {
+            id: 'scheme_standup',
+            code: 'Stand-Up India',
+            name: isEn ? "Stand-Up India Scheme (SC / ST / Women)" : "स्टैंड-अप इंडिया योजना (अनुसूचित जाति/जनजाति/महिला)",
+            ministry: isEn ? "Department of Financial Services (DFS)" : "वित्तीय सेवाएं विभाग, वित्त मंत्रालय",
+            badge: isEn ? "GREENFIELD ENTERPRISE (₹10L TO ₹1CR)" : "ग्रीनफील्ड उद्यम (₹10 लाख से ₹1 करोड़)",
+            badgeColor: "bg-indigo-600 text-white",
+            borderColor: "border-indigo-300 bg-indigo-50/30",
+            suitability: 85,
+            subsidyPct: "Margin Subvention",
+            subsidyAmt: Math.round(activeProjectCost * 0.10),
+            marginPct: standupMarginPct,
+            marginAmt: standupMarginAmt,
+            loanAmt: standupLoan,
+            emiAmt: standupEmi,
+            interest: "8.0% p.a.",
+            tenure: "7 Years",
+            moratorium: "12 Months",
+            collateral: isEn ? "CGSUI Credit Guarantee Scheme" : "CGSUI गारंटी कवर (बैंक तारणमुक्त)",
+            advantage: isEn
+              ? "Composite term loan and working capital facility designed exclusively for SC/ST and female founders."
+              : "अनुसूचित जाति/जनजाति एवं महिला उद्यमियों के लिए समग्र सावधि ऋण एवं कार्यशील पूंजी सुविधा।"
+          },
+          {
+            id: 'scheme_vishwakarma',
+            code: 'PM Vishwakarma',
+            name: isEn ? "PM Vishwakarma Yojana (Traditional Artisans & Trades)" : "प्रधानमंत्री विश्वकर्मा योजना (पारंपरिक कारीगर व शिल्पकार)",
+            ministry: isEn ? "Ministry of MSME" : "सूक्ष्म, लघु एवं मध्यम उद्यम मंत्रालय",
+            badge: isEn ? "5% CONCESSIONAL INTEREST + ₹15,000 TOOLKIT" : "5% रियायती ब्याज दर + ₹15,000 टूलकिट अनुदान",
+            badgeColor: "bg-amber-600 text-white",
+            borderColor: "border-amber-300 bg-amber-50/30",
+            suitability: 82,
+            subsidyPct: "Toolkit + Interest Subvention",
+            subsidyAmt: 15000,
+            marginPct: 0,
+            marginAmt: 0,
+            loanAmt: vishwakarmaLoan,
+            emiAmt: vishwakarmaEmi,
+            interest: "5.0% p.a. Fixed",
+            tenure: "3 Years",
+            moratorium: "0 Months",
+            collateral: isEn ? "100% Collateral-Free (MoMSME Cover)" : "100% बिना गारंटी",
+            advantage: isEn
+              ? "₹15,000 direct modern toolkit voucher + ₹3 Lakh enterprise credit at lowest 5% fixed interest."
+              : "₹15,000 का आधुनिक टूलकिट ई-वाउचर + 5% की न्यूनतम रियायती ब्याज दर पर ₹3 लाख तक का आसान ऋण।"
+          }
+        ];
+
+        return (
+          <div className="space-y-3.5">
+            <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs space-y-2">
               <div className="flex items-center justify-between">
                 <div>
-                  <span className="text-[9px] font-black uppercase bg-emerald-600 text-white px-1.5 py-0.5 rounded">
-                    ★ BEST MATCH (RECOMMENDED)
-                  </span>
-                  <h4 className="font-black text-xs text-slate-900 mt-1">PMEGP — Rural Special Category</h4>
+                  <h3 className="text-xs font-black uppercase tracking-wider text-slate-900 flex items-center gap-1.5">
+                    <Landmark className="w-4 h-4 text-rural-600" />
+                    <span>{isEn ? 'Government Credit & Subsidy Scheme Appraisal' : 'सरकारी ऋण, अनुदान एवं सब्सिडी योजनाओं का हिसाब'}</span>
+                  </h3>
+                  <p className="text-[10px] text-slate-500 mt-0.5">
+                    {isEn 
+                      ? `Calculated dynamically for your ₹${activeProjectCost.toLocaleString()} project cost and profile.`
+                      : `आपकी ₹${activeProjectCost.toLocaleString()} परियोजना लागत व प्रोफ़ाइल के अनुसार रीयल-टाइम गणना।`}
+                  </p>
                 </div>
-                <div className="text-right">
-                  <span className="text-xs font-black text-emerald-800">35% Subsidy</span>
-                  <span className="text-[10px] text-slate-500 block">₹1.68 Lakh Grant</span>
-                </div>
-              </div>
-              <div className="grid grid-cols-3 gap-1 text-[10px] bg-white p-2 rounded-lg border border-emerald-200">
-                <div><span>Interest:</span> <b>9.0 – 9.5%</b></div>
-                <div><span>Collateral:</span> <b>No (CGTMSE)</b></div>
-                <div><span>Match:</span> <b className="text-emerald-700">96% Suitability</b></div>
-              </div>
-              <button
-                onClick={() => onSelectSchemeNavigate && onSelectSchemeNavigate('scheme_pmegp')}
-                className="w-full py-1.5 bg-emerald-700 text-white text-xs font-bold rounded-lg hover:bg-emerald-800 transition"
-              >
-                {isEn ? 'View Complete PMEGP Guidelines' : 'PMEGP पूर्ण दिशा-निर्देश देखें'}
-              </button>
-            </div>
-
-            {/* Scheme 2: PM MUDRA (ALTERNATIVE) */}
-            <div className="p-3.5 rounded-xl border border-slate-200 bg-white space-y-2">
-              <div className="flex items-center justify-between">
-                <div>
-                  <span className="text-[9px] font-bold uppercase bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded">
-                    ALTERNATIVE (FAST SANCTION)
-                  </span>
-                  <h4 className="font-black text-xs text-slate-900 mt-1">PM MUDRA (Kishor / Tarun)</h4>
-                </div>
-                <div className="text-right">
-                  <span className="text-xs font-black text-slate-900">0% Subsidy</span>
-                  <span className="text-[10px] text-slate-500 block">Pure Loan Up to ₹20L</span>
-                </div>
-              </div>
-              <div className="grid grid-cols-3 gap-1 text-[10px] bg-slate-50 p-2 rounded-lg border border-slate-200">
-                <div><span>Interest:</span> <b>8.5 – 10%</b></div>
-                <div><span>Collateral:</span> <b>Collateral-Free</b></div>
-                <div><span>Match:</span> <b className="text-blue-700">88% Suitability</b></div>
+                <span className="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full">
+                  {schemeCards.length} {isEn ? 'Schemes Analyzed' : 'योजनाएं जांची गईं'}
+                </span>
               </div>
             </div>
 
-            {/* Scheme 3: PMFME (HIGH CAPITAL) */}
-            <div className="p-3.5 rounded-xl border border-slate-200 bg-white space-y-2">
-              <div className="flex items-center justify-between">
-                <div>
-                  <span className="text-[9px] font-bold uppercase bg-purple-100 text-purple-800 px-1.5 py-0.5 rounded">
-                    FOOD PROCESSING SPECIFIC
-                  </span>
-                  <h4 className="font-black text-xs text-slate-900 mt-1">PMFME (MoFPI)</h4>
+            {/* Scheme Cards with Full Hisaab & Proceed Buttons */}
+            <div className="space-y-3">
+              {schemeCards.map((sch) => (
+                <div
+                  key={sch.id}
+                  className={`p-4 rounded-2xl border-2 transition-all space-y-3 shadow-xs ${sch.borderColor}`}
+                >
+                  {/* Top Header */}
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <span className={`text-[9px] font-black uppercase px-2 py-0.5 rounded-md inline-block ${sch.badgeColor}`}>
+                        {sch.badge}
+                      </span>
+                      <h4 className="font-black text-sm text-slate-900 mt-1 leading-snug">{sch.name}</h4>
+                      <p className="text-[10px] text-slate-500 font-medium">{sch.ministry}</p>
+                    </div>
+
+                    <div className="text-right flex-shrink-0">
+                      <span className="text-xs font-black text-emerald-800 bg-emerald-100/80 px-2 py-1 rounded-lg block">
+                        {sch.suitability}% {isEn ? 'Suitability' : 'उपयुक्तता'}
+                      </span>
+                      <span className="text-[10px] text-slate-400 font-mono mt-0.5 block">{sch.code}</span>
+                    </div>
+                  </div>
+
+                  {/* Financial Breakdown (Hisaab) Grid */}
+                  <div className="grid grid-cols-4 gap-1.5 text-center text-xs bg-white p-2.5 rounded-xl border border-slate-200">
+                    <div className="p-1.5 rounded-lg bg-slate-50">
+                      <span className="text-[9px] text-slate-500 block uppercase font-bold">
+                        {isEn ? 'Project Cost' : 'प्रोजेक्ट लागत'}
+                      </span>
+                      <span className="text-xs font-black text-slate-900">
+                        ₹{(activeProjectCost / 100000).toFixed(2)}L
+                      </span>
+                    </div>
+
+                    <div className="p-1.5 rounded-lg bg-emerald-50">
+                      <span className="text-[9px] text-emerald-700 block uppercase font-bold">
+                        {isEn ? 'Govt Subsidy' : 'सरकारी सब्सिडी'}
+                      </span>
+                      <span className="text-xs font-black text-emerald-800">
+                        {sch.subsidyAmt > 0 ? `₹${(sch.subsidyAmt / 1000).toFixed(0)}k` : '0%'}
+                      </span>
+                      <span className="text-[8px] text-emerald-600 block">{sch.subsidyPct}</span>
+                    </div>
+
+                    <div className="p-1.5 rounded-lg bg-amber-50">
+                      <span className="text-[9px] text-amber-700 block uppercase font-bold">
+                        {isEn ? 'Own Margin' : 'स्वयं पूंजी'}
+                      </span>
+                      <span className="text-xs font-black text-amber-900">
+                        ₹{(sch.marginAmt / 1000).toFixed(0)}k
+                      </span>
+                      <span className="text-[8px] text-amber-600 block">{sch.marginPct}%</span>
+                    </div>
+
+                    <div className="p-1.5 rounded-lg bg-purple-50">
+                      <span className="text-[9px] text-purple-700 block uppercase font-bold">
+                        {isEn ? 'Monthly EMI' : 'मासिक EMI'}
+                      </span>
+                      <span className="text-xs font-black text-purple-900">
+                        ₹{sch.emiAmt.toLocaleString()}
+                      </span>
+                      <span className="text-[8px] text-purple-600 block">@{sch.interest}</span>
+                    </div>
+                  </div>
+
+                  {/* Scheme Terms Strip */}
+                  <div className="flex flex-wrap items-center justify-between text-[10px] text-slate-600 bg-white/70 px-2.5 py-1.5 rounded-lg border border-slate-200/60 gap-1">
+                    <span>🛡️ <b>{isEn ? 'Collateral:' : 'गारंटी:'}</b> {sch.collateral}</span>
+                    <span>⏳ <b>{isEn ? 'Tenure:' : 'अवधि:'}</b> {sch.tenure} ({sch.moratorium} Mora)</span>
+                  </div>
+
+                  {/* Advantage Note */}
+                  <p className="text-[11px] text-slate-700 leading-relaxed bg-white/50 p-2 rounded-lg border border-slate-100">
+                    💡 <b>{isEn ? 'Key Advantage:' : 'प्रमुख लाभ:'}</b> {sch.advantage}
+                  </p>
+
+                  {/* Action Button: Proceed with Scheme */}
+                  <button
+                    type="button"
+                    onClick={() => onSelectSchemeNavigate && onSelectSchemeNavigate(sch.id)}
+                    className="w-full py-2.5 px-3 bg-gradient-to-r from-emerald-600 via-rural-600 to-emerald-700 hover:from-emerald-700 hover:to-rural-800 text-white text-xs font-black rounded-xl transition-all flex items-center justify-center gap-2 shadow-sm shadow-emerald-700/20 active:scale-[0.99]"
+                  >
+                    <span>
+                      {isEn 
+                        ? `Proceed with ${sch.code} (View Eligibility & Documents) →`
+                        : `${sch.code} के साथ आगे बढ़ें (पात्रता, दस्तावेज़ व आवेदन) →`}
+                    </span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
                 </div>
-                <div className="text-right">
-                  <span className="text-xs font-black text-purple-800">35% Subsidy</span>
-                  <span className="text-[10px] text-slate-500 block">Up to ₹10 Lakh</span>
-                </div>
-              </div>
-              <div className="grid grid-cols-3 gap-1 text-[10px] bg-slate-50 p-2 rounded-lg border border-slate-200">
-                <div><span>Interest:</span> <b>9.0%</b></div>
-                <div><span>Complexity:</span> <b>Moderate</b></div>
-                <div><span>Match:</span> <b className="text-purple-700">84% Suitability</b></div>
-              </div>
+              ))}
             </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
 
       {/* ============================================================= */}
       {/* SUB-TAB 8: LOAN & REPAYMENT AMORTIZATION SCHEDULE              */}

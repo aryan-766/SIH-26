@@ -202,6 +202,7 @@ export default function App() {
 
   // Scheme Hub State
   const [schemes, setSchemes] = useState<any[]>([]);
+  const [selectedSchemeForHub, setSelectedSchemeForHub] = useState<string>('scheme_pmegp');
 
   // Launch Checklist State
   const [checklist, setChecklist] = useState<any[]>([]);
@@ -1524,6 +1525,7 @@ export default function App() {
                 lang={lang}
                 onBackToOverview={() => setCurrentScreen('overview')}
                 onSelectSchemeNavigate={(schemeId) => {
+                  setSelectedSchemeForHub(schemeId);
                   setCurrentScreen('schemes');
                 }}
               />
@@ -1534,6 +1536,8 @@ export default function App() {
               <GovernmentSchemesHub
                 lang={lang}
                 userProfile={userProfile}
+                initialSchemeId={selectedSchemeForHub}
+                onBackToFinance={() => setCurrentScreen('finance')}
                 onSelectSchemeForDpr={(scheme) => {
                   if (scheme.maxLoanAmount) {
                     setCustomTotalCost(Math.min(500000, scheme.maxLoanAmount));

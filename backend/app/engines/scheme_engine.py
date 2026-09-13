@@ -56,11 +56,25 @@ def match_schemes(
             if s.processing_complexity == "Low": score += 10
             elif s.processing_complexity == "High": score -= 15
 
-            # Sector specific bonuses
-            if "pmfme" in s.id and "food" in sector.lower():
+            # Sector & demographic specific bonuses
+            sec_lower = sector.lower()
+            soc_upper = social_category.upper()
+            if "pmfme" in s.id and ("food" in sec_lower or "agro" in sec_lower or "flour" in sec_lower or "oil" in sec_lower):
                 score += 10
             if "pmegp" in s.id:
                 score += 8
+            if "svep" in s.id and is_rural:
+                score += 12
+            if "day_nrlm" in s.id and (soc_upper in ["WOMEN", "SHG", "FEMALE"] or "women" in sec_lower):
+                score += 15
+            if "vishwakarma" in s.id and any(t in sec_lower for t in ["artisan", "carpenter", "tailor", "blacksmith", "craft", "pottery", "mason"]):
+                score += 16
+            if "ahidf" in s.id and any(t in sec_lower for t in ["dairy", "cattle", "livestock", "milk", "feed"]):
+                score += 14
+            if "aif" in s.id and any(t in sec_lower for t in ["storage", "warehouse", "cold", "agro", "post-harvest"]):
+                score += 12
+            if "sfurti" in s.id and any(t in sec_lower for t in ["cluster", "handicraft", "khadi", "honey", "bamboo"]):
+                score += 14
 
             matched.append({
                 "id": s.id,
@@ -75,6 +89,10 @@ def match_schemes(
                 "documents_required": s.documents_required,
                 "description": s.description,
                 "description_hi": s.description_hi,
+                "portal_url": s.portal_url or f"https://www.myscheme.gov.in/schemes/{s.slug}" if s.slug else "https://www.india.gov.in/my-government/schemes",
+                "tags": s.tags or [],
+                "source": s.source or "National Portal of India (india.gov.in)",
+                "slug": s.slug,
                 "suitability_score": min(99, score),
                 "badge": "Best Match" if score >= 90 else ("Recommended" if score >= 80 else "Alternative")
             })

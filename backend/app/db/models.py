@@ -102,6 +102,11 @@ class Scheme(Base):
     documents_required = Column(JSON, default=list)
     description = Column(Text, nullable=True)
     description_hi = Column(Text, nullable=True)
+    portal_url = Column(String, nullable=True)
+    tags = Column(JSON, default=list)
+    slug = Column(String, nullable=True)
+    source = Column(String, default="National Portal of India (india.gov.in)")
+    last_synced = Column(DateTime, default=datetime.datetime.utcnow)
 
 class BusinessApplication(Base):
     __tablename__ = "business_applications"

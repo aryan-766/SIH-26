@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Landmark, Search, ShieldCheck, CheckCircle2, FileText, ChevronDown, 
   ChevronUp, ExternalLink, Sparkles, Filter, AlertCircle, ArrowRight, 
-  Layers, Check, HelpCircle
+  Layers, Check, HelpCircle, ArrowLeft
 } from 'lucide-react';
 import { 
   PAN_INDIA_GOV_SCHEMES, 
@@ -15,18 +15,29 @@ import { BeneficiaryProfile } from '../services/enterpriseStore';
 interface GovernmentSchemesHubProps {
   lang: Language;
   userProfile: BeneficiaryProfile;
+  initialSchemeId?: string;
+  onBackToFinance?: () => void;
   onSelectSchemeForDpr: (scheme: GovScheme) => void;
 }
 
 export function GovernmentSchemesHub({ 
   lang, 
   userProfile, 
+  initialSchemeId,
+  onBackToFinance,
   onSelectSchemeForDpr 
 }: GovernmentSchemesHubProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [expandedSchemeId, setExpandedSchemeId] = useState<string | null>('scheme_pmegp');
+  const [expandedSchemeId, setExpandedSchemeId] = useState<string | null>(initialSchemeId || 'scheme_pmegp');
   const [activeDetailTab, setActiveDetailTab] = useState<Record<string, 'eligibility' | 'documents' | 'process'>>({});
+
+  useEffect(() => {
+    if (initialSchemeId) {
+      setExpandedSchemeId(initialSchemeId);
+      setActiveDetailTab(prev => ({ ...prev, [initialSchemeId]: 'eligibility' }));
+    }
+  }, [initialSchemeId]);
 
   const schemes = getFilteredSchemes(selectedCategory, searchQuery, lang);
 
@@ -87,8 +98,59 @@ export function GovernmentSchemesHub({
     suitabilityBadge: { hi: 'आपकी प्रोफ़ाइल से उपयुक्तता:', en: 'Profile Match Score:', mr: 'प्रोफाइल सुसंगतता:', ta: 'பொருந்தும் அளவு:' },
   };
 
+  const selectedSchemeObj = initialSchemeId ? PAN_INDIA_GOV_SCHEMES.find(s => s.id === initialSchemeId) : null;
+
   return (
     <div className="space-y-3.5 pb-8">
+      {/* Back to Finance Navigation Button */}
+      {onBackToFinance && (
+        <div className="flex items-center justify-between">
+          <button
+            type="button"
+            onClick={onBackToFinance}
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-slate-900 bg-white border border-slate-200 px-3 py-1.5 rounded-xl shadow-xs transition hover:bg-slate-50"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>{lang === 'hi' ? '← वित्त एवं DPR पर वापस लौटें' : '← Back to Finance & DPR'}</span>
+          </button>
+
+          {selectedSchemeObj && (
+            <span className="text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full border border-emerald-300">
+              ✓ {lang === 'hi' ? 'चयनित योजना खुली है' : 'Selected Scheme Open'}
+            </span>
+          )}
+        </div>
+      )}
+
+      {/* Selected Scheme Notification Banner */}
+      {selectedSchemeObj && (
+        <div className="p-3.5 rounded-2xl bg-gradient-to-r from-emerald-50 to-teal-50 border-2 border-emerald-500 shadow-xs flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2.5">
+            <span className="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold text-base shadow-xs flex-shrink-0">
+              ✓
+            </span>
+            <div>
+              <span className="text-[10px] font-black uppercase text-emerald-800 tracking-wider block">
+                {lang === 'hi' ? 'वित्त व DPR से चयनित योजना (पात्रता व दस्तावेज़)' : 'Selected Scheme from Finance & DPR (Eligibility & Documents)'}
+              </span>
+              <h3 className="text-xs font-black text-slate-900">
+                {getLocalized(selectedSchemeObj.name)} ({selectedSchemeObj.code})
+              </h3>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              setExpandedSchemeId(selectedSchemeObj.id);
+              setTab(selectedSchemeObj.id, 'eligibility');
+            }}
+            className="px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold rounded-xl shadow-xs transition flex-shrink-0"
+          >
+            {lang === 'hi' ? 'पात्रता देखें' : 'View Criteria'}
+          </button>
+        </div>
+      )}
+
       {/* Top Banner Header */}
       <div className="bg-gradient-to-br from-rural-800 via-emerald-800 to-teal-900 text-white rounded-3xl p-4 shadow-sm space-y-2">
         <div className="flex items-center justify-between">

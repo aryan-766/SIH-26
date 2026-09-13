@@ -7,7 +7,7 @@
  * 4. Dynamic Scheme-Specific Document Vault (Exact statutory documents & readiness meter per scheme)
  * 5. Interactive Application Submission Modal & Real-Time Application Stage Tracker
  */
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   View,
   Text,
@@ -26,6 +26,7 @@ interface Props {
   userProfile: BeneficiaryProfile;
   lang: Language;
   onNavigateToFinance?: () => void;
+  initialSchemeId?: string;
 }
 
 type SchemesSubTab = 'recommended' | 'eligibility' | 'documents' | 'compare' | 'tracking';
@@ -70,15 +71,23 @@ export interface SchemeData {
   }>;
 }
 
-export const SchemesScreen: React.FC<Props> = ({ userProfile, lang, onNavigateToFinance }) => {
+export const SchemesScreen: React.FC<Props> = ({ userProfile, lang, onNavigateToFinance, initialSchemeId }) => {
   const isEn = lang === 'en';
   // t = translation shorthand for the current language
   const t = translations[lang] || translations['hi'];
-  const [activeSubTab, setActiveSubTab] = useState<SchemesSubTab>('recommended');
-  const [activeSchemeId, setActiveSchemeId] = useState<string>(() => getActiveScheme('pmegp'));
+  const [activeSubTab, setActiveSubTab] = useState<SchemesSubTab>(() => initialSchemeId ? 'eligibility' : 'recommended');
+  const [activeSchemeId, setActiveSchemeId] = useState<string>(() => initialSchemeId || getActiveScheme('pmegp'));
   
   // Scheme selected for viewing in Eligibility / Documents tab
-  const [inspectedSchemeId, setInspectedSchemeId] = useState<string>(() => getActiveScheme('pmegp'));
+  const [inspectedSchemeId, setInspectedSchemeId] = useState<string>(() => initialSchemeId || getActiveScheme('pmegp'));
+
+  useEffect(() => {
+    if (initialSchemeId) {
+      setActiveSchemeId(initialSchemeId);
+      setInspectedSchemeId(initialSchemeId);
+      setActiveSubTab('eligibility');
+    }
+  }, [initialSchemeId]);
 
   // Comparison Tab: User-customizable scheme selection
   const [comparedSchemeIds, setComparedSchemeIds] = useState<string[]>(['pmegp', 'pmfme', 'mudra', 'ahidf']);

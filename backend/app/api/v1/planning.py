@@ -4,11 +4,12 @@ from pydantic import BaseModel
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from app.db.session import get_db
-from app.db.models import BusinessApplication, User
+from app.db.models import BusinessApplication, User, Scheme
 from app.core.security import get_current_user
 from app.engines.recommendation import BUSINESS_CATALOGUE
 from app.engines.financial_engine import calculate_financial_plan
 from app.engines.scheme_engine import match_schemes
+from app.engines.scheme_sync import sync_schemes_from_india_gov
 from app.engines.dpr_generator import generate_dpr_document
 
 router = APIRouter(prefix="/planning", tags=["Module 2: Enterprise Planning & Schemes"])
@@ -131,6 +132,63 @@ def get_matching_schemes(
         is_rural=is_rural,
         db=db
     )
+
+@router.post("/schemes/sync-live")
+def sync_live_schemes(
+    max_pages: int = Query(5, ge=1, le=15),
+    db: Session = Depends(get_db)
+):
+    """
+    Fetches and synchronizes real rural entrepreneurship schemes live from
+    the National Portal of India (https://www.india.gov.in/).
+    """
+    return sync_schemes_from_india_gov(db, max_pages=max_pages)
+
+@router.get("/schemes/all")
+def get_all_schemes(
+    ministry: Optional[str] = Query(None),
+    search: Optional[str] = Query(None),
+    limit: int = Query(100, ge=1, le=500),
+    db: Session = Depends(get_db)
+):
+    """
+    Returns full list of available schemes with official guidelines links,
+    ministry info, loan ceilings, and subsidy parameters.
+    """
+    query = db.query(Scheme)
+    if ministry and ministry.lower() != "all":
+        query = query.filter(Scheme.ministry.ilike(f"%{ministry}%"))
+    if search:
+        search_pattern = f"%{search}%"
+        query = query.filter(
+            (Scheme.name.ilike(search_pattern)) | 
+            (Scheme.description.ilike(search_pattern)) |
+            (Scheme.ministry.ilike(search_pattern))
+        )
+    
+    schemes = query.limit(limit).all()
+    return [
+        {
+            "id": s.id,
+            "name": s.name,
+            "name_hi": s.name_hi,
+            "ministry": s.ministry,
+            "max_loan_amount": s.max_loan_amount,
+            "subsidy_percent_rural": s.subsidy_percent_rural,
+            "special_category_subsidy_percent": s.special_category_subsidy_percent,
+            "collateral_free": s.collateral_free,
+            "eligible_categories": s.eligible_categories,
+            "processing_complexity": s.processing_complexity,
+            "portal_url": s.portal_url or (f"https://www.myscheme.gov.in/schemes/{s.slug}" if s.slug else "https://www.india.gov.in/my-government/schemes"),
+            "tags": s.tags or [],
+            "source": s.source or "National Portal of India (india.gov.in)",
+            "documents_required": s.documents_required,
+            "description": s.description,
+            "description_hi": s.description_hi,
+            "last_synced": s.last_synced.isoformat() if s.last_synced else None
+        }
+        for s in schemes
+    ]
 
 @router.post("/dpr")
 def generate_dpr(req: FinancialPlanRequest, db: Session = Depends(get_db)):

@@ -15,6 +15,7 @@ import { Language } from '../locales';
 interface Props {
   userProfile: BeneficiaryProfile;
   lang: Language;
+  onNavigateToSchemes?: (schemeId?: string) => void;
 }
 
 type FinanceSubTab = 'overview' | 'scheme_selector' | 'capex_opex' | 'revenue_expense' | 'loan_repayment' | 'dpr_generator';
@@ -384,7 +385,7 @@ const SCHEMES_DATABASE: SchemeConfig[] = [
   },
 ];
 
-export const FinanceScreen: React.FC<Props> = ({ userProfile, lang }) => {
+export const FinanceScreen: React.FC<Props> = ({ userProfile, lang, onNavigateToSchemes }) => {
   const isEn = lang === 'en';
   const [activeSubTab, setActiveSubTab] = useState<FinanceSubTab>('overview');
 
@@ -677,12 +678,26 @@ export const FinanceScreen: React.FC<Props> = ({ userProfile, lang }) => {
               );
             })}
           </ScrollView>
+
+          {/* Proceed with Active Scheme Button */}
+          <TouchableOpacity
+            style={styles.proceedSchemeBannerBtn}
+            onPress={() => onNavigateToSchemes && onNavigateToSchemes(selectedSchemeId)}
+          >
+            <Ionicons name="arrow-forward-circle" size={17} color="#ffffff" />
+            <Text style={styles.proceedSchemeBannerBtnText}>
+              {isEn 
+                ? `Proceed with ${activeScheme.shortName} (Eligibility & Docs) →`
+                : `${activeScheme.shortName} के साथ आगे बढ़ें (पात्रता व दस्तावेज़) →`}
+            </Text>
+          </TouchableOpacity>
         </View>
 
         {/* SUB-TABS NAVIGATION */}
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.subTabScroll}>
           {[
             { key: 'overview' as FinanceSubTab, label: t.tabOverview },
+            { key: 'scheme_selector' as FinanceSubTab, label: isEn ? '⭐ Schemes & Hisaab' : '⭐ योजनाएं व हिसाब' },
             { key: 'capex_opex' as FinanceSubTab, label: t.tabCapex },
             { key: 'revenue_expense' as FinanceSubTab, label: t.tabRevenue },
             { key: 'loan_repayment' as FinanceSubTab, label: t.tabLoan },
@@ -854,6 +869,172 @@ export const FinanceScreen: React.FC<Props> = ({ userProfile, lang }) => {
               </Text>
             </View>
 
+            {/* E. QUICK PROCEED WITH SCHEME CARD IN OVERVIEW */}
+            <View style={styles.schemeQuickCtaCard}>
+              <View style={styles.schemeQuickCtaHeader}>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.schemeQuickCtaBadge}>
+                    ★ {isEn ? 'Proceed with Selected Scheme' : 'चयनित योजना के साथ आगे बढ़ें'}
+                  </Text>
+                  <Text style={styles.schemeQuickCtaTitle}>{activeScheme.name}</Text>
+                </View>
+                <View style={styles.schemeQuickCtaSubsidyPill}>
+                  <Text style={styles.schemeQuickCtaSubsidyText}>
+                    {formatCurrency(calculations.subsidy)} Grant
+                  </Text>
+                </View>
+              </View>
+
+              <View style={styles.schemeQuickCtaHisaab}>
+                <View style={styles.schemeQuickCtaCol}>
+                  <Text style={styles.schemeQuickCtaLbl}>{isEn ? 'Net Loan' : 'बैंक ऋण'}</Text>
+                  <Text style={styles.schemeQuickCtaVal}>{formatCurrency(calculations.netLoan)}</Text>
+                </View>
+                <View style={styles.schemeQuickCtaCol}>
+                  <Text style={styles.schemeQuickCtaLbl}>{isEn ? 'Monthly EMI' : 'मासिक EMI'}</Text>
+                  <Text style={[styles.schemeQuickCtaVal, { color: COLORS.primary }]}>₹{calculations.emi.toLocaleString()}</Text>
+                </View>
+                <View style={styles.schemeQuickCtaCol}>
+                  <Text style={styles.schemeQuickCtaLbl}>{isEn ? 'Net Surplus' : 'मासिक बचत'}</Text>
+                  <Text style={[styles.schemeQuickCtaVal, { color: '#16a34a' }]}>₹{calculations.netMonthlySurplus.toLocaleString()}</Text>
+                </View>
+              </View>
+
+              <View style={styles.schemeActionRow}>
+                <TouchableOpacity
+                  style={styles.schemeProceedBtn}
+                  onPress={() => onNavigateToSchemes && onNavigateToSchemes(selectedSchemeId)}
+                >
+                  <Ionicons name="arrow-forward-circle" size={16} color="#ffffff" />
+                  <Text style={styles.schemeProceedBtnText}>
+                    {isEn 
+                      ? `Proceed with ${activeScheme.shortName} →` 
+                      : `${activeScheme.shortName} के साथ आगे बढ़ें →`}
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.schemeSelectBtn}
+                  onPress={() => setActiveSubTab('scheme_selector')}
+                >
+                  <Text style={styles.schemeSelectBtnText}>
+                    {isEn ? 'Compare All' : 'सभी 5 योजनाएं'}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+
+          </View>
+        )}
+
+        {/* ============================================================ */}
+        {/* TAB: SCHEMES & HISAAB (DETAILED CALCULATIONS PER SCHEME)     */}
+        {/* ============================================================ */}
+        {activeSubTab === 'scheme_selector' && (
+          <View style={styles.sectionGap}>
+            <View style={styles.card}>
+              <View style={styles.cardHeaderRow}>
+                <Ionicons name="ribbon-outline" size={18} color={COLORS.primary} />
+                <Text style={styles.cardTitle}>
+                  {isEn ? 'Government Schemes & Live Hisaab' : 'सरकारी ऋण व सब्सिडी योजनाओं का हिसाब'}
+                </Text>
+              </View>
+              <Text style={styles.scaleHintText}>
+                {isEn 
+                  ? `Live financial calculations adapted for ${bizName} with project cost ₹${projectCost.toLocaleString()}:`
+                  : `${bizName} एवं ₹${projectCost.toLocaleString()} लागत के अनुसार सभी योजनाओं की वास्तविक वित्तीय गणना:`}
+              </Text>
+            </View>
+
+            {SCHEMES_DATABASE.map((sch) => {
+              const isSelected = sch.id === selectedSchemeId;
+              const schSubsidy = sch.maxSubsidyAmount 
+                ? Math.min(sch.maxSubsidyAmount, Math.round(projectCost * (sch.subsidyPct / 100)))
+                : Math.round(projectCost * (sch.subsidyPct / 100));
+              const schMargin = Math.round(projectCost * (sch.minMarginPct / 100));
+              const schLoan = Math.max(0, projectCost - schSubsidy - Math.max(schMargin, ownCapital));
+              const monthlyRate = (sch.defaultInterestRate / 100) / 12;
+              const repaymentMonths = (sch.defaultTenureYears * 12) - sch.defaultMoratoriumMonths;
+              let schEmi = 0;
+              if (schLoan > 0 && repaymentMonths > 0) {
+                schEmi = Math.round(
+                  (schLoan * monthlyRate * Math.pow(1 + monthlyRate, repaymentMonths)) /
+                  (Math.pow(1 + monthlyRate, repaymentMonths) - 1)
+                );
+              }
+
+              return (
+                <View
+                  key={sch.id}
+                  style={[styles.schemeCardCalc, isSelected && styles.schemeCardActiveBorder]}
+                >
+                  <View style={styles.schemeCardHeader}>
+                    <View style={{ flex: 1 }}>
+                      <View style={[styles.schemeCardBadge, { backgroundColor: isSelected ? COLORS.primary : '#475569' }]}>
+                        <Text style={styles.schemeCardBadgeText}>{sch.badge}</Text>
+                      </View>
+                      <Text style={styles.schemeCardTitle}>{sch.name}</Text>
+                      <Text style={styles.schemeCardMinistry}>{sch.ministry}</Text>
+                    </View>
+                    <View style={{ alignItems: 'flex-end' }}>
+                      <Text style={[styles.schemeHisaabVal, { color: sch.subsidyPct > 0 ? '#15803d' : '#0369a1' }]}>
+                        {sch.subsidyPct > 0 ? `${sch.subsidyPct}% Subsidy` : '0% Subsidy'}
+                      </Text>
+                      <Text style={styles.schemeHisaabLabel}>{sch.defaultInterestRate}% p.a.</Text>
+                    </View>
+                  </View>
+
+                  {/* Hisaab Grid */}
+                  <View style={styles.schemeHisaabGrid}>
+                    <View style={styles.schemeHisaabBox}>
+                      <Text style={styles.schemeHisaabLabel}>{isEn ? 'Subsidy' : 'सब्सिडी'}</Text>
+                      <Text style={[styles.schemeHisaabVal, { color: '#15803d' }]}>{formatCurrency(schSubsidy)}</Text>
+                    </View>
+                    <View style={styles.schemeHisaabBox}>
+                      <Text style={styles.schemeHisaabLabel}>{isEn ? 'Min Margin' : 'मार्जिन'}</Text>
+                      <Text style={[styles.schemeHisaabVal, { color: '#b45309' }]}>{formatCurrency(schMargin)}</Text>
+                    </View>
+                    <View style={styles.schemeHisaabBox}>
+                      <Text style={styles.schemeHisaabLabel}>{isEn ? 'Net Loan' : 'बैंक ऋण'}</Text>
+                      <Text style={styles.schemeHisaabVal}>{formatCurrency(schLoan)}</Text>
+                    </View>
+                    <View style={styles.schemeHisaabBox}>
+                      <Text style={styles.schemeHisaabLabel}>{isEn ? 'EMI/Mo' : 'मासिक EMI'}</Text>
+                      <Text style={[styles.schemeHisaabVal, { color: COLORS.primary }]}>₹{schEmi.toLocaleString()}</Text>
+                    </View>
+                  </View>
+
+                  <View style={styles.collateralInfoRow}>
+                    <Ionicons name="shield-checkmark-outline" size={13} color="#0369a1" />
+                    <Text style={styles.collateralInfoText}>
+                      {sch.collateralType} • {sch.defaultTenureYears} {isEn ? 'Years' : 'वर्ष'} ({sch.defaultMoratoriumMonths} {isEn ? 'Mo Moratorium' : 'माह छूट'})
+                    </Text>
+                  </View>
+
+                  {/* Actions */}
+                  <View style={styles.schemeActionRow}>
+                    <TouchableOpacity
+                      style={styles.schemeProceedBtn}
+                      onPress={() => onNavigateToSchemes && onNavigateToSchemes(sch.id)}
+                    >
+                      <Ionicons name="arrow-forward-circle" size={16} color="#ffffff" />
+                      <Text style={styles.schemeProceedBtnText}>
+                        {isEn ? `Proceed with Scheme →` : `इस योजना के साथ आगे बढ़ें →`}
+                      </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      style={[styles.schemeSelectBtn, isSelected && { backgroundColor: '#e2e8f0' }]}
+                      onPress={() => handleSelectScheme(sch.id)}
+                    >
+                      <Text style={styles.schemeSelectBtnText}>
+                        {isSelected ? (isEn ? '✓ Active' : '✓ चयनित') : (isEn ? 'Select Scheme' : 'चुनें व रीकैलकुलेट')}
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              );
+            })}
           </View>
         )}
 
@@ -1584,5 +1765,213 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: '#ffffff',
     marginLeft: 6,
+  },
+
+  // Proceed Scheme Banner Button
+  proceedSchemeBannerBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: COLORS.primary,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    borderRadius: RADIUS.md,
+    marginTop: 10,
+    gap: 6,
+    ...SHADOW.xs,
+  },
+  proceedSchemeBannerBtnText: {
+    fontFamily: FONT.bold,
+    fontSize: 12.5,
+    color: '#ffffff',
+  },
+
+  // Quick Scheme CTA in Overview
+  schemeQuickCtaCard: {
+    backgroundColor: '#f0fdf4',
+    borderRadius: RADIUS.lg,
+    padding: SPACING.md,
+    borderWidth: 2,
+    borderColor: '#10b981',
+    ...SHADOW.sm,
+  },
+  collateralInfoRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    backgroundColor: '#f8fafc',
+    paddingHorizontal: 8,
+    paddingVertical: 5,
+    borderRadius: 6,
+    marginVertical: 4,
+  },
+  collateralInfoText: {
+    fontFamily: FONT.medium,
+    fontSize: 10.5,
+    color: '#0369a1',
+  },
+  schemeQuickCtaHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: 8,
+  },
+  schemeQuickCtaBadge: {
+    fontFamily: FONT.bold,
+    fontSize: 10,
+    color: '#15803d',
+    textTransform: 'uppercase',
+  },
+  schemeQuickCtaTitle: {
+    fontFamily: FONT.bold,
+    fontSize: 13,
+    color: '#0f172a',
+    marginTop: 2,
+  },
+  schemeQuickCtaSubsidyPill: {
+    backgroundColor: '#dcfce7',
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#86efac',
+  },
+  schemeQuickCtaSubsidyText: {
+    fontFamily: FONT.bold,
+    fontSize: 11,
+    color: '#166534',
+  },
+  schemeQuickCtaHisaab: {
+    flexDirection: 'row',
+    gap: 6,
+    backgroundColor: '#ffffff',
+    padding: 8,
+    borderRadius: RADIUS.sm,
+    borderWidth: 1,
+    borderColor: '#bbf7d0',
+    marginVertical: 8,
+  },
+  schemeQuickCtaCol: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  schemeQuickCtaLbl: {
+    fontFamily: FONT.medium,
+    fontSize: 9,
+    color: '#64748b',
+    textTransform: 'uppercase',
+  },
+  schemeQuickCtaVal: {
+    fontFamily: FONT.bold,
+    fontSize: 12,
+    color: '#0f172a',
+    marginTop: 2,
+  },
+
+  // Detailed Scheme Calculation Cards
+  schemeCardCalc: {
+    backgroundColor: '#ffffff',
+    borderRadius: RADIUS.lg,
+    padding: SPACING.md,
+    borderWidth: 1.5,
+    borderColor: '#e2e8f0',
+    marginBottom: SPACING.sm,
+    ...SHADOW.sm,
+  },
+  schemeCardActiveBorder: {
+    borderColor: '#10b981',
+    backgroundColor: '#f0fdf4',
+  },
+  schemeCardHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: 6,
+  },
+  schemeCardBadge: {
+    paddingHorizontal: 8,
+    paddingVertical: 2.5,
+    borderRadius: 6,
+    alignSelf: 'flex-start',
+    marginBottom: 4,
+  },
+  schemeCardBadgeText: {
+    fontFamily: FONT.bold,
+    fontSize: 9.5,
+    color: '#ffffff',
+  },
+  schemeCardTitle: {
+    fontFamily: FONT.bold,
+    fontSize: 13.5,
+    color: '#0f172a',
+  },
+  schemeCardMinistry: {
+    fontFamily: FONT.medium,
+    fontSize: 10,
+    color: '#64748b',
+    marginTop: 1,
+  },
+  schemeHisaabGrid: {
+    flexDirection: 'row',
+    gap: 5,
+    backgroundColor: '#ffffff',
+    padding: 8,
+    borderRadius: RADIUS.sm,
+    borderWidth: 1,
+    borderColor: '#e2e8f0',
+    marginVertical: 8,
+  },
+  schemeHisaabBox: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  schemeHisaabLabel: {
+    fontFamily: FONT.medium,
+    fontSize: 8.5,
+    color: '#64748b',
+    textTransform: 'uppercase',
+  },
+  schemeHisaabVal: {
+    fontFamily: FONT.bold,
+    fontSize: 11.5,
+    color: '#0f172a',
+    marginTop: 2,
+  },
+  schemeActionRow: {
+    flexDirection: 'row',
+    gap: 8,
+    marginTop: 6,
+  },
+  schemeProceedBtn: {
+    flex: 1.6,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#047857',
+    paddingVertical: 9,
+    paddingHorizontal: 10,
+    borderRadius: RADIUS.md,
+    gap: 5,
+  },
+  schemeProceedBtnText: {
+    fontFamily: FONT.bold,
+    fontSize: 11.5,
+    color: '#ffffff',
+  },
+  schemeSelectBtn: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#ffffff',
+    borderWidth: 1,
+    borderColor: '#cbd5e1',
+    paddingVertical: 9,
+    paddingHorizontal: 8,
+    borderRadius: RADIUS.md,
+  },
+  schemeSelectBtnText: {
+    fontFamily: FONT.bold,
+    fontSize: 11,
+    color: '#334155',
   },
 });
